@@ -1,0 +1,158 @@
+{
+  "record": {
+    "source": "prototype",
+    "title": "John Doe (prototype)",
+    "duration": 420,
+    "ext": ".wav",
+    "language": "English",
+    "languageCode": "en",
+    "provider": null,
+    "model": null,
+    "prompt": [],
+    "noAudioDetected": false,
+    "transcriptTranslations": [],
+    "video": { "available": false, "source": "upload", "width": 0, "height": 0 },
+    "webInfo": null,
+    "podcastInfo": null,
+    "queueIdentifier": null,
+    "expectedSpeakers": 2,
+    "timesAIClipsCreated": null,
+    "speakerRecognition": true,
+    "speakers": [
+      { "speaker": 0, "speakerLabel": "Clinician" },
+      { "speaker": 1, "speakerLabel": "Patient" }
+    ]
+  },
+  "words": [
+    { "speaker": 0, "start": 0.0, "end": 0.4, "punctuated_word": "Hi" },
+    { "speaker": 0, "start": 0.4, "end": 0.8, "punctuated_word": "John," },
+    { "speaker": 0, "start": 0.8, "end": 1.2, "punctuated_word": "I'm" },
+    { "speaker": 0, "start": 1.2, "end": 1.6, "punctuated_word": "Dr." },
+    { "speaker": 0, "start": 1.6, "end": 2.2, "punctuated_word": "Reed." },
+    { "speaker": 0, "start": 2.2, "end": 2.8, "punctuated_word": "What" },
+    { "speaker": 0, "start": 2.8, "end": 3.2, "punctuated_word": "brings" },
+    { "speaker": 0, "start": 3.2, "end": 3.6, "punctuated_word": "you" },
+    { "speaker": 0, "start": 3.6, "end": 4.0, "punctuated_word": "in" },
+    { "speaker": 0, "start": 4.0, "end": 4.4, "punctuated_word": "today?" },
+
+    { "speaker": 1, "start": 5.0, "end": 5.4, "punctuated_word": "I've" },
+    { "speaker": 1, "start": 5.4, "end": 5.9, "punctuated_word": "had" },
+    { "speaker": 1, "start": 5.9, "end": 6.4, "punctuated_word": "headaches" },
+    { "speaker": 1, "start": 6.4, "end": 6.8, "punctuated_word": "and" },
+    { "speaker": 1, "start": 6.8, "end": 7.3, "punctuated_word": "fatigue" },
+    { "speaker": 1, "start": 7.3, "end": 7.7, "punctuated_word": "for" },
+    { "speaker": 1, "start": 7.7, "end": 8.3, "punctuated_word": "about" },
+    { "speaker": 1, "start": 8.3, "end": 8.8, "punctuated_word": "two" },
+    { "speaker": 1, "start": 8.8, "end": 9.3, "punctuated_word": "weeks." },
+
+    { "speaker": 0, "start": 10.0, "end": 10.4, "punctuated_word": "Any" },
+    { "speaker": 0, "start": 10.4, "end": 10.9, "punctuated_word": "fever," },
+    { "speaker": 0, "start": 10.9, "end": 11.5, "punctuated_word": "vision" },
+    { "speaker": 0, "start": 11.5, "end": 12.0, "punctuated_word": "changes," },
+    { "speaker": 0, "start": 12.0, "end": 12.6, "punctuated_word": "weakness," },
+    { "speaker": 0, "start": 12.6, "end": 13.2, "punctuated_word": "or" },
+    { "speaker": 0, "start": 13.2, "end": 13.8, "punctuated_word": "severe" },
+    { "speaker": 0, "start": 13.8, "end": 14.4, "punctuated_word": "sudden" },
+    { "speaker": 0, "start": 14.4, "end": 15.0, "punctuated_word": "onset?" },
+
+    { "speaker": 1, "start": 16.0, "end": 16.6, "punctuated_word": "No" },
+    { "speaker": 1, "start": 16.6, "end": 17.3, "punctuated_word": "fever" },
+    { "speaker": 1, "start": 17.3, "end": 17.8, "punctuated_word": "or" },
+    { "speaker": 1, "start": 17.8, "end": 18.4, "punctuated_word": "vision" },
+    { "speaker": 1, "start": 18.4, "end": 19.1, "punctuated_word": "changes." },
+    { "speaker": 1, "start": 19.1, "end": 19.6, "punctuated_word": "Mild" },
+    { "speaker": 1, "start": 19.6, "end": 20.2, "punctuated_word": "nausea" },
+    { "speaker": 1, "start": 20.2, "end": 20.6, "punctuated_word": "sometimes." },
+
+    { "speaker": 0, "start": 22.0, "end": 22.5, "punctuated_word": "How's" },
+    { "speaker": 0, "start": 22.5, "end": 23.1, "punctuated_word": "sleep" },
+    { "speaker": 0, "start": 23.1, "end": 23.5, "punctuated_word": "and" },
+    { "speaker": 0, "start": 23.5, "end": 24.0, "punctuated_word": "stress?" },
+
+    { "speaker": 1, "start": 25.0, "end": 25.5, "punctuated_word": "Work" },
+    { "speaker": 1, "start": 25.5, "end": 26.1, "punctuated_word": "has" },
+    { "speaker": 1, "start": 26.1, "end": 26.6, "punctuated_word": "been" },
+    { "speaker": 1, "start": 26.6, "end": 27.1, "punctuated_word": "rough" },
+    { "speaker": 1, "start": 27.1, "end": 27.8, "punctuated_word": "and" },
+    { "speaker": 1, "start": 27.8, "end": 28.4, "punctuated_word": "I've" },
+    { "speaker": 1, "start": 28.4, "end": 29.0, "punctuated_word": "slept" },
+    { "speaker": 1, "start": 29.0, "end": 29.6, "punctuated_word": "less." },
+    { "speaker": 1, "start": 29.6, "end": 30.2, "punctuated_word": "I" },
+    { "speaker": 1, "start": 30.2, "end": 30.8, "punctuated_word": "take" },
+    { "speaker": 1, "start": 30.8, "end": 31.6, "punctuated_word": "ibuprofen" },
+    { "speaker": 1, "start": 31.6, "end": 32.2, "punctuated_word": "occasionally." },
+
+    { "speaker": 0, "start": 34.0, "end": 34.6, "punctuated_word": "Thanks." },
+    { "speaker": 0, "start": 34.6, "end": 35.2, "punctuated_word": "We'll" },
+    { "speaker": 0, "start": 35.2, "end": 35.7, "punctuated_word": "review" },
+    { "speaker": 0, "start": 35.7, "end": 36.3, "punctuated_word": "red" },
+    { "speaker": 0, "start": 36.3, "end": 36.9, "punctuated_word": "flags," },
+    { "speaker": 0, "start": 36.9, "end": 37.6, "punctuated_word": "check" },
+    { "speaker": 0, "start": 37.6, "end": 38.2, "punctuated_word": "your" },
+    { "speaker": 0, "start": 38.2, "end": 38.8, "punctuated_word": "blood" },
+    { "speaker": 0, "start": 38.8, "end": 39.3, "punctuated_word": "pressure," },
+    { "speaker": 0, "start": 39.3, "end": 39.9, "punctuated_word": "and" },
+    { "speaker": 0, "start": 39.9, "end": 40.4, "punctuated_word": "discuss" },
+    { "speaker": 0, "start": 40.4, "end": 41.0, "punctuated_word": "a" },
+    { "speaker": 0, "start": 41.0, "end": 41.6, "punctuated_word": "plan." }
+  ],
+  "content": [
+    {
+      "name": "Summary",
+      "results": [
+        {
+          "body": "## Clinical Summary (prototype)\\n\\n### Chief Complaint (CC)\\n- Headache and fatigue for ~2 weeks.\\n\\n### HPI (Symptoms)\\n- Mild intermittent nausea.\\n- Denies fever and vision changes.\\n- Stress and reduced sleep reported.\\n\\n### Assessment (prototype)\\n- Tension-type headache vs. other benign etiologies; screen for red flags.\\n\\n### Plan (prototype)\\n- Review red flags and vitals; consider basic labs if persistent/worsening.\\n- Sleep hygiene and stress management counseling (prototype)."
+        }
+      ]
+    },
+    {
+      "name": "Quotes",
+      "results": [
+        {
+          "body": "- \"I've had headaches and fatigue for about two weeks.\"\\n- \"Mild nausea sometimes.\"\\n- \"Work has been rough and I've slept less.\""
+        }
+      ]
+    },
+    {
+      "name": "Chapters",
+      "results": [
+        {
+          "body": "- Intake and chief complaint\\n- Red flag review\\n- Sleep/stress and medication history\\n- Initial plan"
+        }
+      ]
+    },
+    {
+      "name": "Summary By Speaker",
+      "results": [
+        {
+          "body": "## {{speaker:0}}\\n- Asked about red flags and contextual factors.\\n- Proposed plan: review red flags/vitals, consider labs if persistent.\\n\\n## {{speaker:1}}\\n- Reported headache + fatigue x2 weeks.\\n- Mild nausea; denies fever/vision changes.\\n- Stress and less sleep; occasional ibuprofen."
+        }
+      ]
+    },
+    {
+      "name": "Summary By Topic",
+      "results": [
+        {
+          "body": "## Symptoms\\n- Headache, fatigue, mild nausea\\n\\n## Negatives / red flags denied\\n- No fever, no vision changes\\n\\n## Context\\n- Increased stress and reduced sleep\\n\\n## Medications\\n- Occasional ibuprofen"
+        }
+      ]
+    },
+    {
+      "name": "Follow Up Questions (UX Research)",
+      "results": [
+        {
+          "body": "- Any recent head trauma?\\n- Any new neurologic symptoms (weakness, numbness, speech changes)?\\n- Any changes in caffeine intake or hydration?\\n- How often are you taking ibuprofen?"
+        }
+      ]
+    },
+    {
+      "name": "UX Report",
+      "results": [
+        {
+          "body": "Prototype-only: This tab is repurposed to demonstrate medical follow-ups and structured outputs. No real analysis performed."
+        }
+      ]
+    }
+  ]
+}
+
