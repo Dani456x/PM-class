@@ -12,7 +12,10 @@
           Session lock in <span class="text-weight-bold text-primary">{{ idleCountdown }}</span>
         </div>
         <q-space />
-        <div class="column items-end q-mr-md">
+        <div
+          class="column items-end q-mr-md cursor-help"
+          title="18.5 hours used · 2.5 hours remaining · Upgrade for more."
+        >
           <div class="text-caption text-weight-medium">{{ creditsLabel }}</div>
           <q-linear-progress :value="creditsProgress" color="primary" style="width: 140px; height: 3px; border-radius: 4px" />
         </div>
@@ -53,7 +56,7 @@
             :label="drawerMini ? undefined : 'Patients'"
             class="full-width"
             style="border-radius: 8px; min-height: 44px"
-            @click="$router.push('/start')"
+            @click="goPatientSearch"
           />
         </div>
         <div class="q-px-sm q-mb-md">
@@ -74,7 +77,7 @@
           <q-input
             dense
             outlined
-            placeholder="Search sessions…"
+            placeholder="Search sessions, names, ICD…"
             class="search-input"
             dark
             v-model="searchQuery"
@@ -103,26 +106,74 @@
         </div>
 
         <div class="q-px-sm col" style="overflow-y: auto; overflow-x: hidden">
-          <q-item
-            v-for="p in filteredProjects"
-            :key="p.id"
-            clickable
-            dark
-            class="rounded-borders q-mb-xs"
-            style="min-height: 44px"
-            :class="{ 'bg-white-alpha': $route.path === p.route }"
-            @click="$router.push(p.route)"
-          >
-            <q-item-section>
-              <q-item-label class="text-white text-caption">
-                <div class="row justify-between">
-                  <span>{{ p.groupLabel }}</span>
-                  <span>{{ p.dateLabel }}</span>
-                </div>
-              </q-item-label>
-              <q-item-label class="text-white text-body2">{{ p.title }}</q-item-label>
-            </q-item-section>
-          </q-item>
+          <template v-for="node in filteredSidebarNodes" :key="node.key">
+            <q-expansion-item
+              v-if="node.kind === 'patient'"
+              dark
+              dense
+              expand-separator
+              icon="sym_o_folder"
+              :label="node.name"
+              header-class="text-white rounded-borders q-mb-xs"
+              style="border-radius: 8px"
+            >
+              <q-list dense dark class="q-pl-sm">
+                <q-item
+                  v-for="s in node.sessions"
+                  :key="s.id"
+                  clickable
+                  v-ripple
+                  class="rounded-borders q-mb-xs"
+                  style="min-height: 44px"
+                  :class="{ 'bg-white-alpha': $route.path === s.route }"
+                  @click="$router.push(s.route)"
+                >
+                  <q-item-section>
+                    <q-item-label class="text-white text-body2">{{ s.title }}</q-item-label>
+                    <q-item-label caption class="text-white" style="opacity: 0.75">{{ s.duration }} · {{ s.subtitle }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <StatusBadge :label="badgeLabel(s.status)" :variant="badgeVariant(s.status)" />
+                  </q-item-section>
+                  <q-menu touch-position context-menu>
+                    <q-list dense style="min-width: 180px">
+                      <q-item clickable v-close-popup @click="$router.push(s.route)"><q-item-section>Open</q-item-section></q-item>
+                      <q-item clickable v-close-popup @click="toast('Duplicated (sim)')"><q-item-section>Duplicate</q-item-section></q-item>
+                      <q-item clickable v-close-popup @click="openExportDialog(s)"><q-item-section>Export PDF</q-item-section></q-item>
+                      <q-item clickable v-close-popup @click="toast('Archived (sim)')"><q-item-section>Archive</q-item-section></q-item>
+                      <q-item clickable v-close-popup @click="toast('Deleted (sim)')"><q-item-section class="text-negative">Delete</q-item-section></q-item>
+                    </q-list>
+                  </q-menu>
+                </q-item>
+              </q-list>
+            </q-expansion-item>
+
+            <q-item
+              v-else
+              clickable
+              dark
+              class="rounded-borders q-mb-xs"
+              style="min-height: 44px"
+              :class="{ 'bg-white-alpha': $route.path === node.route }"
+              @click="$router.push(node.route)"
+            >
+              <q-item-section>
+                <q-item-label class="text-white text-caption">
+                  <div class="row justify-between">
+                    <span>{{ node.groupLabel }}</span>
+                    <span>{{ node.dateLabel }}</span>
+                  </div>
+                </q-item-label>
+                <q-item-label class="text-white text-body2">{{ node.title }}</q-item-label>
+              </q-item-section>
+              <q-menu touch-position context-menu>
+                <q-list dense style="min-width: 180px">
+                  <q-item clickable v-close-popup @click="$router.push(node.route)"><q-item-section>Open</q-item-section></q-item>
+                  <q-item clickable v-close-popup @click="openExportDialog(node)"><q-item-section>Export PDF</q-item-section></q-item>
+                </q-list>
+              </q-menu>
+            </q-item>
+          </template>
         </div>
 
         <div v-if="!drawerMini" class="q-px-md q-pb-sm">
@@ -138,7 +189,13 @@
             Drop PDF or fax image (demo: loads sample summary)
           </div>
           <q-btn flat dense no-caps color="white" class="full-width q-mt-xs" label="Analyze sample report" @click="runDocDemo" />
-          <q-card v-if="docSummary" flat class="q-mt-sm q-pa-sm bg-white text-dark" style="border-radius: 8px">
+          <div v-if="docAnalyzing" class="q-mt-sm q-pa-sm bg-white rounded-borders">
+            <div class="text-caption text-grey-8 q-mb-xs">Analyzing document…</div>
+            <q-skeleton type="text" />
+            <q-skeleton type="text" class="q-mt-xs" />
+            <q-skeleton type="rect" height="40px" class="q-mt-sm" />
+          </div>
+          <q-card v-else-if="docSummary" flat class="q-mt-sm q-pa-sm bg-white text-dark" style="border-radius: 8px">
             <div class="text-caption text-weight-medium q-mb-xs">Extracted (simulated)</div>
             <div class="text-caption" v-html="docSummary" />
             <q-btn dense unelevated color="primary" no-caps class="q-mt-sm full-width" label="Add to patient record" @click="toastAdded" />
@@ -176,14 +233,36 @@
     <q-page-container class="wt-page-container">
       <router-view />
     </q-page-container>
+
+    <q-dialog v-model="exportDialog" class="wt-modal-shadow">
+      <q-card class="wt-modal-shadow" style="min-width: 360px; border-radius: 12px">
+        <q-card-section class="text-h6">Export document</q-card-section>
+        <q-card-section class="q-pt-none text-body2 text-grey-8">
+          Color-coded sensitivity labels (required for outbound documents):
+        </q-card-section>
+        <q-card-section class="q-pt-none column q-gutter-sm">
+          <q-chip square color="grey-3" text-color="dark" icon="sym_o_public">Public / educational</q-chip>
+          <q-chip square color="blue-2" text-color="dark" icon="sym_o_badge">Internal — operational</q-chip>
+          <q-chip square color="orange-3" text-color="dark" icon="sym_o_warning">Confidential — PHI</q-chip>
+          <q-chip square color="red-3" text-color="dark" icon="sym_o_emergency">Restricted — highly sensitive</q-chip>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn unelevated color="primary" label="Export PDF (sim)" v-close-popup @click="toast('PDF queued with PHI label (sim)')" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
+import StatusBadge from '../components/medical/StatusBadge.vue'
 
 const $q = useQuasar()
+const router = useRouter()
 const drawer = ref(true)
 const drawerMini = ref(false)
 const searchQuery = ref('')
@@ -200,18 +279,40 @@ const creditsProgress = ref(0.87)
 const netStrong = ref(true)
 const docDrag = ref(false)
 const docSummary = ref('')
+const docAnalyzing = ref(false)
+const exportDialog = ref(false)
 
-const projects = [
+const sarahSessions = [
   {
-    id: 'sarah-session',
+    id: 'sarah-today',
     route: '/session',
-    groupLabel: 'Visit',
-    dateLabel: 'Today',
-    title: 'Sarah Mitchell — demo session',
-    folder: 'patients',
+    title: 'Visit · Apr 2, 2026',
+    duration: 'Simulated',
+    subtitle: 'Cardio workup',
+    status: 'draft',
   },
   {
-    id: 'john-doe',
+    id: 'sarah-mar',
+    route: '/session',
+    title: 'Visit · Mar 12, 2026',
+    duration: '18m',
+    subtitle: 'HTN follow-up',
+    status: 'approved',
+  },
+  {
+    id: 'sarah-jan',
+    route: '/session',
+    title: 'Visit · Jan 4, 2026',
+    duration: '22m',
+    subtitle: 'Annual',
+    status: 'sent',
+  },
+]
+
+const flatItems = [
+  {
+    kind: 'item',
+    key: 'john-doe',
     route: '/transcript/john-doe',
     groupLabel: 'Patient',
     dateLabel: 'Archive',
@@ -219,7 +320,8 @@ const projects = [
     folder: 'patients',
   },
   {
-    id: 'nicky',
+    kind: 'item',
+    key: 'nicky',
     route: '/transcript/example',
     groupLabel: 'Project',
     dateLabel: '26 Mar 2026',
@@ -228,12 +330,70 @@ const projects = [
   },
 ]
 
-const filteredProjects = computed(() => {
-  const q = (searchQuery.value || '').trim().toLowerCase()
-  const inFolder = projects.filter(p => p.folder === activeFolder.value)
-  if (!q) return inFolder
-  return inFolder.filter(p => (p.title || '').toLowerCase().includes(q) || (p.groupLabel || '').toLowerCase().includes(q))
+const sidebarNodes = computed(() => {
+  const nodes = []
+  if (activeFolder.value === 'patients') {
+    nodes.push({
+      kind: 'patient',
+      key: 'sarah',
+      name: 'Mitchell, Sarah',
+      sessions: sarahSessions,
+    })
+    flatItems.filter(i => i.folder === 'patients').forEach(i => nodes.push({ ...i }))
+  } else {
+    flatItems.filter(i => i.folder === 'projects').forEach(i => nodes.push({ ...i }))
+  }
+  return nodes
 })
+
+const filteredSidebarNodes = computed(() => {
+  const q = (searchQuery.value || '').trim().toLowerCase()
+  if (!q) return sidebarNodes.value
+  return sidebarNodes.value
+    .map(n => {
+      if (n.kind === 'patient') {
+        const nameHit = n.name.toLowerCase().includes(q)
+        const sess = n.sessions.filter(
+          s =>
+            s.title.toLowerCase().includes(q) ||
+            s.subtitle.toLowerCase().includes(q) ||
+            s.status.includes(q),
+        )
+        if (nameHit) return n
+        if (sess.length) return { ...n, sessions: sess }
+        return null
+      }
+      if ((n.title || '').toLowerCase().includes(q) || (n.groupLabel || '').toLowerCase().includes(q)) return n
+      return null
+    })
+    .filter(Boolean)
+})
+
+function badgeLabel(s) {
+  if (s === 'draft') return 'Draft'
+  if (s === 'approved') return 'Approved'
+  if (s === 'sent') return 'Sent'
+  return 'Draft'
+}
+
+function badgeVariant(s) {
+  if (s === 'approved') return 'approved'
+  if (s === 'sent') return 'sent'
+  return 'draft'
+}
+
+function openExportDialog() {
+  exportDialog.value = true
+}
+
+function toast(msg) {
+  $q.notify({ message: msg, color: 'grey-8', position: 'top' })
+}
+
+function goPatientSearch() {
+  router.push({ path: '/start', query: { patientSearch: '1' } })
+  window.dispatchEvent(new CustomEvent('wt-focus-patient-search'))
+}
 
 const idleCountdown = computed(() => {
   const m = Math.floor(idleSeconds.value / 60)
@@ -251,9 +411,14 @@ function onActivity() {
 }
 
 function runDocDemo() {
-  docSummary.value =
-    '<strong>Prior cardiology report</strong> — Dr. Rao, 2025-11-02. Key: EF 55%, mild LVH. <span style="background:#fff9c4">Mention of stress test deferred.</span>'
-  $q.notify({ message: 'Analyzing document…', color: 'primary', timeout: 800 })
+  docSummary.value = ''
+  docAnalyzing.value = true
+  setTimeout(() => {
+    docAnalyzing.value = false
+    docSummary.value =
+      '<strong>Type:</strong> Cardiology report · <strong>Date:</strong> 2025-11-02 · <strong>From:</strong> Dr. Rao<br/><strong>Findings:</strong> EF 55%, mild LVH. <span style="background:#fff9c4">Stress test deferred.</span> · <strong>Meds:</strong> metoprolol'
+    $q.notify({ message: 'Document analyzed', color: 'primary', timeout: 600 })
+  }, 1400)
 }
 
 function onDocDrop() {
@@ -265,6 +430,20 @@ function toastAdded() {
   $q.notify({ message: 'Summary appended to visit history (simulated)', color: 'positive' })
 }
 
+function onResize() {
+  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+    drawerMini.value = true
+  }
+}
+
+function onPatientSearchHotkey(e) {
+  const mod = e.metaKey || e.ctrlKey
+  if (mod && (e.key === 'k' || e.key === 'K')) {
+    e.preventDefault()
+    goPatientSearch()
+  }
+}
+
 onMounted(() => {
   resetIdle()
   idleTimer = setInterval(() => {
@@ -272,12 +451,17 @@ onMounted(() => {
   }, 1000)
   window.addEventListener('pointerdown', onActivity)
   window.addEventListener('keydown', onActivity)
+  window.addEventListener('keydown', onPatientSearchHotkey, true)
+  window.addEventListener('resize', onResize)
+  onResize()
 })
 
 onUnmounted(() => {
   if (idleTimer) clearInterval(idleTimer)
   window.removeEventListener('pointerdown', onActivity)
   window.removeEventListener('keydown', onActivity)
+  window.removeEventListener('keydown', onPatientSearchHotkey, true)
+  window.removeEventListener('resize', onResize)
 })
 </script>
 

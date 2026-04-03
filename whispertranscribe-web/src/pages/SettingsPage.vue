@@ -33,7 +33,16 @@
       </q-tab-panel>
       <q-tab-panel name="templates" class="q-pa-none">
         <q-card flat bordered class="q-pa-md" style="border-radius: 8px">
-          <div class="text-body2 text-grey-8 q-mb-md">SOAP, H&amp;P, Progress, Discharge — drag-and-drop editor (prototype).</div>
+          <div class="text-body2 text-grey-8 q-mb-md">
+            Default templates: SOAP, H&amp;P, Progress, Discharge. Drag to reorder sections, rename fields, toggle mandatory (prototype).
+          </div>
+          <q-list bordered separator class="rounded-borders q-mb-md">
+            <q-item v-for="t in templateList" :key="t.id" dense>
+              <q-item-section avatar><q-icon name="sym_o_drag_indicator" color="grey-6" /></q-item-section>
+              <q-item-section>{{ t.name }}</q-item-section>
+              <q-item-section side><q-toggle v-model="t.mandatory" dense label="Required" /></q-item-section>
+            </q-item>
+          </q-list>
           <q-btn outline color="primary" no-caps label="Create custom template" />
         </q-card>
       </q-tab-panel>
@@ -41,8 +50,30 @@
         <q-card flat bordered class="q-pa-md" style="border-radius: 8px">
           <div class="text-h6 q-mb-sm">2h 34m remaining</div>
           <q-linear-progress :value="0.12" color="primary" class="q-mb-md" style="height: 4px; border-radius: 4px" />
-          <div class="text-caption text-grey-7">18.5 hours used · 2.5 hours remaining · Upgrade for more (simulated).</div>
-          <q-btn unelevated color="primary" no-caps class="q-mt-md" label="View session breakdown" />
+          <div class="text-caption text-grey-7 q-mb-md">18.5 hours used · 2.5 hours remaining · Upgrade for more (simulated).</div>
+          <div class="row q-col-gutter-sm q-mb-md">
+            <q-input v-model="usageFrom" outlined dense label="From" type="date" class="col-12 col-sm-6" />
+            <q-input v-model="usageTo" outlined dense label="To" type="date" class="col-12 col-sm-6" />
+          </div>
+          <q-markup-table flat bordered dense wrap-cells class="q-mb-md">
+            <thead>
+              <tr>
+                <th class="text-left">Session</th>
+                <th class="text-left">Date</th>
+                <th class="text-left">Duration</th>
+                <th class="text-left">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="u in usageRows" :key="u.id">
+                <td>{{ u.title }}</td>
+                <td>{{ u.date }}</td>
+                <td>{{ u.duration }}</td>
+                <td>{{ u.status }}</td>
+              </tr>
+            </tbody>
+          </q-markup-table>
+          <q-btn unelevated color="primary" no-caps label="Upgrade for more time" />
         </q-card>
       </q-tab-panel>
     </q-tab-panels>
@@ -95,4 +126,19 @@ function connect(emr) {
 function finishOauth() {
   oauthOpen.value = false
 }
+
+const usageFrom = ref('2026-03-01')
+const usageTo = ref('2026-04-02')
+const usageRows = [
+  { id: '1', title: 'Sarah Mitchell — visit', date: 'Apr 2, 2026', duration: 'Simulated', status: 'Draft' },
+  { id: '2', title: 'Sarah Mitchell — follow-up', date: 'Mar 12, 2026', duration: '18m', status: 'Approved' },
+  { id: '3', title: 'John Doe — prototype', date: 'Mar 1, 2026', duration: '12m', status: 'Sent' },
+]
+
+const templateList = ref([
+  { id: 'soap', name: 'SOAP (default)', mandatory: true },
+  { id: 'hp', name: 'H&P Note', mandatory: false },
+  { id: 'prog', name: 'Progress Note', mandatory: false },
+  { id: 'dc', name: 'Discharge Summary', mandatory: false },
+])
 </script>

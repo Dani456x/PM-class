@@ -2,14 +2,17 @@
   <q-page class="wt-dashboard q-pa-md q-pa-lg-md">
     <div class="row items-center q-mb-lg">
       <div class="col">
-        <div class="text-h4 wt-display">Patient search</div>
+        <div class="wt-h2 wt-display">Patient search</div>
         <div class="text-body2 text-grey-7 q-mt-xs">
           Select or create a patient before starting a clinical capture session. Recording stays locked until a patient is active in the visit workspace.
         </div>
       </div>
-      <ActionButton variant="secondary" @click="openCreate = true">
-        <span class="row items-center no-wrap"><q-icon name="sym_o_person_add" class="q-mr-sm" size="20px" /> New patient</span>
-      </ActionButton>
+      <div class="row q-gutter-sm items-center">
+        <q-btn round unelevated color="primary" icon="sym_o_add" size="lg" style="min-width: 44px; min-height: 44px" aria-label="New patient" @click="openCreate = true" />
+        <ActionButton variant="secondary" @click="openCreate = true">
+          <span class="row items-center no-wrap"><q-icon name="sym_o_person_add" class="q-mr-sm" size="20px" /> New patient</span>
+        </ActionButton>
+      </div>
     </div>
 
     <q-input
@@ -81,13 +84,14 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import PatientAvatar from '../components/medical/PatientAvatar.vue'
 import ActionButton from '../components/medical/ActionButton.vue'
 import { RECENT_PATIENTS } from '../data/medical-demo.js'
 
 const router = useRouter()
+const route = useRoute()
 const STORAGE_PATIENT = 'wt_selected_patient'
 
 const search = ref('')
@@ -137,20 +141,38 @@ function createAndGo() {
   selectPatient(row)
 }
 
-function onGlobalKey(e) {
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-    e.preventDefault()
+function focusPatientSearch() {
+  nextTick(() => {
     searchInputRef.value?.focus?.()
+    const el = searchInputRef.value?.$el?.querySelector?.('input')
+    el?.focus?.()
+  })
+}
+
+function onGlobalKey(e) {
+  if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+    e.preventDefault()
+    focusPatientSearch()
   }
 }
 
+watch(
+  () => route.query.patientSearch,
+  v => {
+    if (v) focusPatientSearch()
+  },
+)
+
 onMounted(() => {
-  window.addEventListener('keydown', onGlobalKey)
-  searchInputRef.value?.focus?.()
+  window.addEventListener('keydown', onGlobalKey, true)
+  window.addEventListener('wt-focus-patient-search', focusPatientSearch)
+  if (route.query.patientSearch) focusPatientSearch()
+  else focusPatientSearch()
 })
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', onGlobalKey)
+  window.removeEventListener('keydown', onGlobalKey, true)
+  window.removeEventListener('wt-focus-patient-search', focusPatientSearch)
 })
 </script>
 
@@ -163,7 +185,6 @@ onUnmounted(() => {
 }
 .wt-display {
   font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
   color: #0f3d3d;
 }
 .wt-search :deep(.q-field__control) {

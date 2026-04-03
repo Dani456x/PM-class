@@ -14,6 +14,26 @@ export const RECENT_PATIENTS = [
   { id: 'john-doe', name: 'John Doe', dob: '1978-06-22', mrn: '00892', insurance: 'BCBS', lastSeen: '1 week ago' },
 ]
 
+/** Last 5 visits with diagnosis codes (patient context timeline) */
+export const DEMO_VISIT_TIMELINE = [
+  { date: 'Apr 2, 2026', label: 'Today — Cardio concern', code: 'R07.9' },
+  { date: 'Mar 12, 2026', label: 'Follow-up HTN', code: 'I10' },
+  { date: 'Jan 4, 2026', label: 'Annual wellness', code: 'Z00.00' },
+  { date: 'Oct 18, 2025', label: 'URI', code: 'J06.9' },
+  { date: 'Aug 3, 2025', label: 'Lipid panel', code: 'Z13.6' },
+]
+
+/** Sparkline heights 0–100 for cross-visit vitals demo */
+export const DEMO_SPARK_BP = [42, 48, 55, 58, 62, 65]
+export const DEMO_SPARK_A1C = [38, 38, 37, 39, 38, 38]
+export const DEMO_SPARK_WT = [72, 71, 70, 69, 68, 64]
+
+export const DEMO_SPECIALISTS = [
+  { label: 'Dr. Patel — Cardiology — Houston Methodist', value: 'patel' },
+  { label: 'Dr. Rao — Cardiology — Memorial Hermann', value: 'rao' },
+  { label: 'Dr. Kim — Internal Medicine — Kelsey-Seybold', value: 'kim' },
+]
+
 /** Full utterances — words streamed ~300ms each in UI */
 export const DEMO_UTTERANCES = [
   {
@@ -22,6 +42,7 @@ export const DEMO_UTTERANCES = [
     startSec: 0,
     words: ['Good', 'morning', 'Sarah,', 'what', 'brings', 'you', 'in', 'today?'],
     uncertainIndex: null,
+    smallTalk: true,
   },
   {
     speaker: 'PATIENT',
@@ -77,7 +98,7 @@ export const DEMO_UTTERANCES = [
 ]
 
 export const DEMO_CLINICAL_MILESTONES = [
-  { afterUtteranceIndex: 0, chiefComplaint: 'Chest tightness and shortness of breath × 2 weeks (emerging).' },
+  { afterUtteranceIndex: 0, chiefComplaint: 'Chest tightness and shortness of breath × 2 weeks.' },
   { afterUtteranceIndex: 1, symptoms: ['Chest tightness', 'Exertional dyspnea', 'Worse on stairs'] },
   { afterUtteranceIndex: 3, symptoms: ['Chest tightness', 'Exertional dyspnea', 'Episodic dizziness', 'FHx CAD'] },
   { afterUtteranceIndex: 4, keyTerms: ['angina', 'EKG', 'stress test'], provisional: 'Stable angina — provisional pending stress test' },
