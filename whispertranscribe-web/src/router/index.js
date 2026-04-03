@@ -22,6 +22,20 @@ const routes = [
     ]
   },
   {
+    path: '/session',
+    component: () => import('../layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('../pages/MedicalSessionPage.vue') }
+    ]
+  },
+  {
+    path: '/settings',
+    component: () => import('../layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('../pages/SettingsPage.vue') }
+    ]
+  },
+  {
     path: '/transcript/:id',
     component: () => import('../layouts/MainLayout.vue'),
     children: [

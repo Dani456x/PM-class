@@ -1,12 +1,31 @@
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  color: #37474f;
+  background: #f8fafb;
 }
 
 :root {
-  --brand-primary: #7A1E2B; /* maroon */
-  --brand-accent: #A05A2C; /* warm brown */
-  --brand-primary-bg: #f8eceb; /* light maroon tint */
-  --brand-accent-bg: #fff1de; /* light brown tint */
+  --brand-primary: #0f3d3d;
+  --brand-accent: #1565c0;
+  --brand-surface: #f8fafb;
+  --brand-card: #ffffff;
+  --brand-success: #1b5e20;
+  --brand-warning: #e65100;
+  --brand-danger: #b71c1c;
+  --brand-neutral: #37474f;
+  --brand-primary-bg: #e0f2f1;
+  --brand-accent-bg: #e3f2fd;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --radius-input: 4px;
+  --radius-card: 8px;
+  --radius-modal: 12px;
+  --radius-pill: 20px;
 }
 
 .q-btn {

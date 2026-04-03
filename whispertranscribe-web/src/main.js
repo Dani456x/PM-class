@@ -13,13 +13,13 @@ app.use(Quasar, {
   iconSet,
   config: {
     brand: {
-      primary: '#7A1E2B', // maroon
-      secondary: '#7A1E2B',
-      accent: '#A05A2C', // warm brown
-      positive: '#21ba45',
-      negative: '#c10015',
-      info: '#31ccec',
-      warning: '#ff8d28',
+      primary: '#0F3D3D',
+      secondary: '#37474F',
+      accent: '#1565C0',
+      positive: '#1B5E20',
+      negative: '#B71C1C',
+      info: '#1565C0',
+      warning: '#E65100',
       dark: '#1d1d1d',
     }
   }
