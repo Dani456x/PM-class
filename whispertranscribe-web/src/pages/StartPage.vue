@@ -99,11 +99,7 @@ const searchInputRef = ref(null)
 const openCreate = ref(false)
 const newPatient = ref({ name: '', dob: '', mrn: '', insurance: '' })
 
-const roster = ref([
-  ...RECENT_PATIENTS,
-  { id: 'p3', name: 'Alex Rivera', dob: '1992-11-02', mrn: '11203', insurance: 'UHC', lastSeen: 'Mar 28, 2026' },
-  { id: 'p4', name: 'Jordan Lee', dob: '1965-04-18', mrn: '22001', insurance: 'Medicare', lastSeen: 'Mar 20, 2026' },
-])
+const roster = ref([...RECENT_PATIENTS])
 
 const recentPatients = computed(() => roster.value.slice(0, 4))
 

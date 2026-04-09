@@ -5,7 +5,8 @@
       <q-icon name="sym_o_chevron_right" size="14px" class="q-mx-xs" />
       <span class="text-weight-medium">{{ patientLastFirst }}</span>
       <q-icon name="sym_o_chevron_right" size="14px" class="q-mx-xs" />
-      <span>Visit · Apr 2, 2026</span>
+      <span v-if="activePatientTab === 'interview'">Interview</span>
+      <span v-else>Transcription · Apr 2, 2026</span>
     </div>
 
     <div v-if="consentNeeded" class="q-mb-md">
@@ -40,6 +41,21 @@
       </q-card-section>
     </q-card>
 
+    <div v-if="patient" class="q-mb-md">
+      <q-tabs
+        v-model="activePatientTab"
+        dense
+        no-caps
+        align="left"
+        indicator-color="primary"
+        active-color="primary"
+        class="wt-patient-tabs"
+      >
+        <q-tab name="interview" label="Patient Interview" />
+        <q-tab name="transcription" label="Transcription" />
+      </q-tabs>
+    </div>
+
     <div class="row q-col-gutter-md no-wrap items-stretch wt-session-row">
       <!-- Main -->
       <div class="col-12 col-lg">
@@ -53,6 +69,37 @@
             </div>
 
             <template v-else>
+              <q-tab-panels v-model="activePatientTab" animated>
+                <q-tab-panel name="interview" class="q-pa-none">
+                  <div class="row items-start justify-between q-mb-md">
+                    <div>
+                      <div class="text-h6 wt-h3">Clinical Interview Summary</div>
+                      <div class="text-caption text-grey-7 q-mt-xs">{{ USER_INTERVIEW.interviewer }} · {{ USER_INTERVIEW.duration }}</div>
+                    </div>
+                    <q-chip dense outline color="primary">{{ USER_INTERVIEW.date }}</q-chip>
+                  </div>
+
+                  <div class="column q-gutter-md">
+                    <SectionCard
+                      v-for="s in USER_INTERVIEW.sections"
+                      :key="s.label"
+                      :title="s.label"
+                      :default-expanded="true"
+                    >
+                      <div class="text-body2" style="line-height: 1.65">{{ s.text }}</div>
+                    </SectionCard>
+                  </div>
+
+                  <div class="row justify-end q-mt-lg">
+                    <q-btn unelevated color="primary" no-caps label="Start New Transcription →" @click="activePatientTab = 'transcription'" />
+                  </div>
+                </q-tab-panel>
+
+                <q-tab-panel name="transcription" class="q-pa-none">
+                  <div class="row items-center justify-between q-mb-sm">
+                    <div class="text-h6 wt-h3">Transcription</div>
+                    <q-btn flat dense no-caps color="primary" label="View Interview ←" @click="activePatientTab = 'interview'" />
+                  </div>
               <!-- Recording bar -->
               <div class="column items-center q-py-lg">
                 <div class="row items-center q-gutter-md q-mb-md full-width justify-center wt-mic-row">
@@ -317,6 +364,8 @@
                   </template>
                 </div>
               </q-slide-transition>
+                </q-tab-panel>
+              </q-tab-panels>
             </template>
           </q-card-section>
         </q-card>
@@ -332,7 +381,7 @@
           <q-btn v-if="!windowNarrow" flat dense :icon="rightCollapsed ? 'sym_o_chevron_left' : 'sym_o_chevron_right'" :label="rightCollapsed ? '' : 'Collapse'" @click="rightCollapsed = !rightCollapsed" />
 
           <div v-show="!rightCollapsed || windowNarrow" class="column q-gutter-md">
-            <SectionCard title="Patient context" :default-expanded="true">
+            <SectionCard title="Clinical Context" :default-expanded="true">
               <template #badge><StatusBadge label="EMR" variant="sent" /></template>
               <div class="text-caption text-grey-8 q-mb-sm">Chief conditions, medications, allergies (simulated)</div>
               <div class="row wrap q-gutter-xs q-mb-md">
@@ -357,7 +406,7 @@
               </q-list>
               <q-card flat bordered class="q-pa-sm q-mt-md" style="background: #fff8e1; border-color: #ffe082">
                 <div class="text-caption text-weight-medium text-warning">Cross-visit patterns</div>
-                <div class="text-caption q-mb-xs">Over last 4 visits: BP trending up, HbA1c stable, recent weight loss ~8 lbs (simulated).</div>
+                <div class="text-caption q-mb-xs">Over last 4 visits: BP trending up, HbA1c trending up, weight slowly increasing (simulated).</div>
                 <div class="row q-col-gutter-sm q-mt-sm">
                   <div class="col-4">
                     <div class="text-caption text-grey-7">BP</div>
@@ -514,6 +563,7 @@ import {
   DEMO_SPECIALISTS,
   DEMO_UTTERANCES,
   DEMO_VISIT_TIMELINE,
+  USER_INTERVIEW,
   buildSoapBody,
 } from '../data/medical-demo.js'
 
@@ -528,6 +578,7 @@ const maskedDob = ref(true)
 const maskedMrn = ref(true)
 const consentNeeded = ref(false)
 const lastEditTime = ref('2:14 PM')
+const activePatientTab = ref('interview')
 
 const micChoice = ref('Integrated Microphone')
 const micOptions = ['Integrated Microphone', 'USB Headset', 'Bluetooth']

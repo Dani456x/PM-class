@@ -59,19 +59,6 @@
             @click="goPatientSearch"
           />
         </div>
-        <div class="q-px-sm q-mb-md">
-          <q-btn
-            unelevated
-            no-caps
-            color="white"
-            text-color="primary"
-            icon="sym_o_mic"
-            :label="drawerMini ? undefined : 'Visit workspace'"
-            class="full-width"
-            style="border-radius: 8px; min-height: 44px"
-            @click="$router.push('/session')"
-          />
-        </div>
 
         <div class="q-px-md q-mb-sm" v-if="!drawerMini">
           <q-input
@@ -88,23 +75,6 @@
           </q-input>
         </div>
 
-        <div class="q-px-md q-mb-sm" v-if="!drawerMini">
-          <div class="text-white text-caption q-mb-xs" style="opacity: 0.9">Folders</div>
-          <q-btn-toggle
-            v-model="activeFolder"
-            no-caps
-            dense
-            unelevated
-            toggle-color="white"
-            toggle-text-color="primary"
-            color="white"
-            text-color="primary"
-            rounded
-            class="full-width"
-            :options="folderOptions"
-          />
-        </div>
-
         <div class="q-px-sm col" style="overflow-y: auto; overflow-x: hidden">
           <template v-for="node in filteredSidebarNodes" :key="node.key">
             <q-expansion-item
@@ -112,10 +82,11 @@
               dark
               dense
               expand-separator
-              icon="sym_o_folder"
+              icon="sym_o_person"
               :label="node.name"
               header-class="text-white rounded-borders q-mb-xs"
               style="border-radius: 8px"
+              default-opened
             >
               <q-list dense dark class="q-pl-sm">
                 <q-item
@@ -147,32 +118,6 @@
                 </q-item>
               </q-list>
             </q-expansion-item>
-
-            <q-item
-              v-else
-              clickable
-              dark
-              class="rounded-borders q-mb-xs"
-              style="min-height: 44px"
-              :class="{ 'bg-white-alpha': $route.path === node.route }"
-              @click="$router.push(node.route)"
-            >
-              <q-item-section>
-                <q-item-label class="text-white text-caption">
-                  <div class="row justify-between">
-                    <span>{{ node.groupLabel }}</span>
-                    <span>{{ node.dateLabel }}</span>
-                  </div>
-                </q-item-label>
-                <q-item-label class="text-white text-body2">{{ node.title }}</q-item-label>
-              </q-item-section>
-              <q-menu touch-position context-menu>
-                <q-list dense style="min-width: 180px">
-                  <q-item clickable v-close-popup @click="$router.push(node.route)"><q-item-section>Open</q-item-section></q-item>
-                  <q-item clickable v-close-popup @click="openExportDialog(node)"><q-item-section>Export PDF</q-item-section></q-item>
-                </q-list>
-              </q-menu>
-            </q-item>
           </template>
         </div>
 
@@ -266,11 +211,6 @@ const router = useRouter()
 const drawer = ref(true)
 const drawerMini = ref(false)
 const searchQuery = ref('')
-const activeFolder = ref('patients')
-const folderOptions = [
-  { label: 'Patients', value: 'patients' },
-  { label: 'Projects', value: 'projects' },
-]
 
 const idleSeconds = ref(14 * 60 + 59)
 let idleTimer = null
@@ -282,68 +222,42 @@ const docSummary = ref('')
 const docAnalyzing = ref(false)
 const exportDialog = ref(false)
 
-const sarahSessions = [
+const johnSessions = [
   {
-    id: 'sarah-today',
+    id: 'john-today',
     route: '/session',
     title: 'Visit · Apr 2, 2026',
     duration: 'Simulated',
-    subtitle: 'Cardio workup',
+    subtitle: 'Diabetes management',
     status: 'draft',
   },
   {
-    id: 'sarah-mar',
+    id: 'john-jan',
     route: '/session',
-    title: 'Visit · Mar 12, 2026',
-    duration: '18m',
-    subtitle: 'HTN follow-up',
+    title: 'Visit · Jan 8, 2026',
+    duration: '22m',
+    subtitle: 'A1C follow-up',
     status: 'approved',
   },
   {
-    id: 'sarah-jan',
+    id: 'john-oct',
     route: '/session',
-    title: 'Visit · Jan 4, 2026',
-    duration: '22m',
-    subtitle: 'Annual',
+    title: 'Visit · Oct 5, 2025',
+    duration: '15m',
+    subtitle: 'Hypertension check',
     status: 'sent',
   },
 ]
 
-const flatItems = [
-  {
-    kind: 'item',
-    key: 'john-doe',
-    route: '/transcript/john-doe',
-    groupLabel: 'Patient',
-    dateLabel: 'Archive',
-    title: 'John Doe (prototype)',
-    folder: 'patients',
-  },
-  {
-    kind: 'item',
-    key: 'nicky',
-    route: '/transcript/example',
-    groupLabel: 'Project',
-    dateLabel: '26 Mar 2026',
-    title: 'User Interview 1: Nicky',
-    folder: 'projects',
-  },
-]
-
 const sidebarNodes = computed(() => {
-  const nodes = []
-  if (activeFolder.value === 'patients') {
-    nodes.push({
+  return [
+    {
       kind: 'patient',
-      key: 'sarah',
-      name: 'Mitchell, Sarah',
-      sessions: sarahSessions,
-    })
-    flatItems.filter(i => i.folder === 'patients').forEach(i => nodes.push({ ...i }))
-  } else {
-    flatItems.filter(i => i.folder === 'projects').forEach(i => nodes.push({ ...i }))
-  }
-  return nodes
+      key: 'john-smith',
+      name: 'Smith, John',
+      sessions: johnSessions,
+    },
+  ]
 })
 
 const filteredSidebarNodes = computed(() => {
@@ -363,7 +277,6 @@ const filteredSidebarNodes = computed(() => {
         if (sess.length) return { ...n, sessions: sess }
         return null
       }
-      if ((n.title || '').toLowerCase().includes(q) || (n.groupLabel || '').toLowerCase().includes(q)) return n
       return null
     })
     .filter(Boolean)

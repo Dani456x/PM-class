@@ -1,132 +1,129 @@
-/** WhisperTranscribe Medical — prototype demo data (Sarah Mitchell) */
+/** WhisperTranscribe Medical — prototype demo data (John Smith) */
 
 export const DEMO_PATIENT = {
-  id: 'sarah-mitchell',
-  name: 'Sarah Mitchell',
-  dob: '1985-03-12',
-  mrn: '00421',
-  insurance: 'Aetna',
-  lastSeen: '2 days ago',
+  id: 'john-smith',
+  name: 'John Smith',
+  dob: '1968-07-14',
+  mrn: '00312',
+  insurance: 'Blue Cross Blue Shield',
+  lastSeen: 'Today',
 }
 
-export const RECENT_PATIENTS = [
-  DEMO_PATIENT,
-  { id: 'john-doe', name: 'John Doe', dob: '1978-06-22', mrn: '00892', insurance: 'BCBS', lastSeen: '1 week ago' },
-]
+export const RECENT_PATIENTS = [DEMO_PATIENT]
 
 /** Last 5 visits with diagnosis codes (patient context timeline) */
 export const DEMO_VISIT_TIMELINE = [
-  { date: 'Apr 2, 2026', label: 'Today — Cardio concern', code: 'R07.9' },
-  { date: 'Mar 12, 2026', label: 'Follow-up HTN', code: 'I10' },
-  { date: 'Jan 4, 2026', label: 'Annual wellness', code: 'Z00.00' },
-  { date: 'Oct 18, 2025', label: 'URI', code: 'J06.9' },
-  { date: 'Aug 3, 2025', label: 'Lipid panel', code: 'Z13.6' },
+  { date: 'Apr 2, 2026', label: 'Today — Diabetes management', code: 'E11.65' },
+  { date: 'Jan 8, 2026', label: 'A1C follow-up', code: 'E11.9' },
+  { date: 'Oct 5, 2025', label: 'Hypertension check', code: 'I10' },
+  { date: 'Jul 14, 2025', label: 'Annual wellness', code: 'Z00.00' },
+  { date: 'Apr 22, 2025', label: 'Foot neuropathy screen', code: 'E11.40' },
 ]
 
-/** Sparkline heights 0–100 for cross-visit vitals demo */
-export const DEMO_SPARK_BP = [42, 48, 55, 58, 62, 65]
-export const DEMO_SPARK_A1C = [38, 38, 37, 39, 38, 38]
-export const DEMO_SPARK_WT = [72, 71, 70, 69, 68, 64]
+/** Sparkline heights 0–100 for cross-visit vitals demo (trend up: BP, A1C, weight) */
+export const DEMO_SPARK_BP = [48, 51, 54, 58, 62, 67]
+export const DEMO_SPARK_A1C = [46, 49, 53, 58, 64, 71] // visually ~7.1 → 8.4%
+export const DEMO_SPARK_WT = [52, 54, 55, 57, 59, 61]
 
 export const DEMO_SPECIALISTS = [
-  { label: 'Dr. Patel — Cardiology — Houston Methodist', value: 'patel' },
-  { label: 'Dr. Rao — Cardiology — Memorial Hermann', value: 'rao' },
-  { label: 'Dr. Kim — Internal Medicine — Kelsey-Seybold', value: 'kim' },
+  { label: 'Dr. Tashkentov — Endocrinology — Houston Methodist', value: 'tashkentov' },
 ]
 
 /** Full utterances — words streamed ~300ms each in UI */
 export const DEMO_UTTERANCES = [
   {
-    speaker: 'DR. CHEN',
+    speaker: 'DR. RODRIGUEZ',
     role: 'doctor',
     startSec: 0,
-    words: ['Good', 'morning', 'Sarah,', 'what', 'brings', 'you', 'in', 'today?'],
+    words: ['Good', 'morning', 'John,', 'how', 'have', 'you', 'been', 'feeling', 'since', 'your', 'last', 'visit?'],
     uncertainIndex: null,
     smallTalk: true,
   },
   {
     speaker: 'PATIENT',
     role: 'patient',
-    startSec: 5,
+    startSec: 7,
     words: [
-      "I've", 'been', 'having', 'chest', 'tightness', 'and', 'shortness', 'of', 'breath', 'for', 'about', 'two', 'weeks.',
-      'Mostly', 'when', 'I', 'climb', 'stairs.',
+      'My', 'home', 'glucose', 'has', 'been', 'around', '180', 'to', '220,', 'and', "I've", 'had', 'tingling', 'in', 'both',
+      'feet', 'for', 'about', 'three', 'months.',
     ],
     uncertainIndex: null,
   },
   {
-    speaker: 'DR. CHEN',
+    speaker: 'DR. RODRIGUEZ',
     role: 'doctor',
     startSec: 22,
-    words: ['Any', 'pain', 'radiating', 'to', 'your', 'arm', 'or', 'jaw?', 'Any', 'dizziness?'],
+    words: ['Have', 'you', 'been', 'taking', 'your', 'metformin', 'consistently?', "What's", 'your', 'diet', 'been', 'like?'],
     uncertainIndex: null,
   },
   {
     speaker: 'PATIENT',
     role: 'patient',
-    startSec: 30,
-    words: ['Slight', 'dizziness', 'sometimes,', 'no', 'pain.', 'My', 'father', 'had', 'heart', 'disease.'],
-    uncertainIndex: null,
-  },
-  {
-    speaker: 'DR. CHEN',
-    role: 'doctor',
-    startSec: 45,
+    startSec: 33,
     words: [
-      "I'm", 'going', 'to', 'order', 'an', 'EKG', 'today.', 'Based', 'on', "what", "you're", 'describing,',
-      'I', 'believe', 'this', 'may', 'be', 'stable', 'angina.', "We'll", 'need', 'a', 'stress', 'test', 'to', 'confirm.',
+      "I'll", 'be', 'honest,', "I've", 'skipped', 'some', 'doses', 'because', 'work', 'has', 'been', 'stressful.',
+      'And', "I've", 'been', 'eating', 'late', 'takeout', 'more', 'than', 'I', 'should.',
     ],
-    uncertainIndex: 18, // "angina" for demo uncertainty
+    uncertainIndex: null,
+  },
+  {
+    speaker: 'DR. RODRIGUEZ',
+    role: 'doctor',
+    startSec: 52,
+    words: [
+      'Your', 'A1C', 'came', 'back', '8.4%,', 'up', 'from', '7.1%', 'in', 'January.',
+      'The', 'tingling', 'sounds', 'consistent', 'with', 'peripheral', 'neuropathy.',
+      "I'm", 'going', 'to', 'order', 'a', 'monofilament', 'test', 'today.',
+    ],
+    uncertainIndex: 17, // "neuropathy" for demo uncertainty
   },
   {
     speaker: 'PATIENT',
     role: 'patient',
-    startSec: 62,
-    words: ['Is', 'that', 'serious?'],
+    startSec: 78,
+    words: ['Is', 'the', 'neuropathy', 'reversible?', 'I', "didn't", 'realize', 'things', 'had', 'gotten', 'this', 'bad.'],
     uncertainIndex: null,
   },
   {
-    speaker: 'DR. CHEN',
+    speaker: 'DR. RODRIGUEZ',
     role: 'doctor',
-    startSec: 67,
+    startSec: 90,
     words: [
-      "It's", 'manageable,', 'but', 'I', 'want', 'to', 'refer', 'you', 'to', 'a', 'cardiologist', '—', 'Dr.', 'Patel',
-      'at', 'Houston', 'Methodist.', "I'll", 'send', 'the', 'referral', 'today.',
+      'Early-stage', 'changes', 'can', 'often', 'stabilize', 'with', 'better', 'control.',
+      "I'd", 'like', 'to', 'add', 'a', 'GLP-1', 'agonist', 'called', 'semaglutide,',
+      'and', 'I', 'am', 'referring', 'you', 'to', 'Dr.', 'Tashkentov', 'in', 'endocrinology.',
     ],
     uncertainIndex: null,
   },
 ]
 
 export const DEMO_CLINICAL_MILESTONES = [
-  { afterUtteranceIndex: 0, chiefComplaint: 'Chest tightness and shortness of breath × 2 weeks.' },
-  { afterUtteranceIndex: 1, symptoms: ['Chest tightness', 'Exertional dyspnea', 'Worse on stairs'] },
-  { afterUtteranceIndex: 3, symptoms: ['Chest tightness', 'Exertional dyspnea', 'Episodic dizziness', 'FHx CAD'] },
-  { afterUtteranceIndex: 4, keyTerms: ['angina', 'EKG', 'stress test'], provisional: 'Stable angina — provisional pending stress test' },
-  { afterUtteranceIndex: 6, actions: ['Order EKG', 'Refer to cardiology (Dr. Patel)'] },
+  { afterUtteranceIndex: 1, chiefComplaint: 'Elevated home glucose; bilateral foot tingling × 3 months.' },
+  { afterUtteranceIndex: 1, symptoms: ['Fasting hyperglycemia (180–220 mg/dL)', 'Bilateral foot tingling', 'Fatigue'] },
+  {
+    afterUtteranceIndex: 3,
+    symptoms: [
+      'Fasting hyperglycemia (180–220 mg/dL)',
+      'Bilateral foot tingling × 3 months',
+      'Fatigue',
+      'Medication non-adherence',
+      'Dietary indiscretion (late takeout)',
+      'Psychosocial stress (work)',
+    ],
+  },
+  {
+    afterUtteranceIndex: 4,
+    keyTerms: ['neuropathy', 'A1C 8.4%', 'monofilament test'],
+    provisional: 'T2DM with hyperglycemia; peripheral neuropathy — provisional pending exam findings',
+  },
+  { afterUtteranceIndex: 6, actions: ['Order monofilament test', 'Start semaglutide', 'Refer to endocrinology (Dr. Tashkentov)'] },
 ]
 
 export const DEMO_BILLING_CODES = [
-  {
-    id: '1',
-    code: 'I20.9',
-    type: 'ICD-10',
-    description: 'Angina pectoris, unspecified',
-    confidence: 94,
-  },
-  {
-    id: '2',
-    code: '93000',
-    type: 'CPT',
-    description: 'EKG complete',
-    confidence: 88,
-  },
-  {
-    id: '3',
-    code: '93015',
-    type: 'CPT',
-    description: 'Cardiovascular stress test',
-    confidence: 76,
-  },
+  { id: '1', code: 'E11.65', type: 'ICD-10', description: 'Type 2 diabetes mellitus with hyperglycemia', confidence: 97 },
+  { id: '2', code: 'E11.40', type: 'ICD-10', description: 'Type 2 diabetes mellitus with diabetic neuropathy, unspecified', confidence: 89 },
+  { id: '3', code: '99214', type: 'CPT', description: 'Office visit, moderate complexity', confidence: 92 },
+  { id: '4', code: 'S0395', type: 'CPT', description: 'Monofilament sensory test', confidence: 81 },
 ]
 
 export const DEMO_SOAP_TEMPLATES = [
@@ -138,21 +135,22 @@ export const DEMO_SOAP_TEMPLATES = [
 
 export function buildSoapBody(template) {
   const s =
-    'Patient presents with chest tightness and exertional dyspnea × 2 weeks. Reports episodic dizziness. Family history positive for coronary artery disease (father). Denies chest pain radiating to arm or jaw.'
-  const o = 'EKG ordered. Vitals pending. No acute distress observed. Further workup with stress test to be scheduled.'
-  const a = 'Stable angina (ICD-10: I20.9) — provisional diagnosis pending stress test results.'
+    'John Smith reports home glucose readings 180–220 mg/dL and bilateral foot tingling for ~3 months. He admits skipping metformin doses due to work stress and notes increased late takeout meals. He asks whether early neuropathy can improve with better control.'
+  const o =
+    'A1C 8.4% (up from 7.1% in Jan). BP 138/86. BMI 29.4. Foot exam: monofilament testing ordered/performed for sensory screening; no ulcers noted.'
+  const a = '1) T2DM with hyperglycemia (E11.65). 2) T2DM with diabetic neuropathy (E11.40). 3) Essential hypertension (I10).'
   const p =
-    '1. Order EKG stat. 2. Schedule cardiac stress test. 3. Refer to cardiology (Dr. Patel, Houston Methodist). 4. Patient education re: angina management. 5. Follow-up in 1 week.'
+    '1. Start semaglutide (GLP-1 agonist) and counsel on expected effects/side effects. 2. Reinforce metformin adherence; discuss strategies for workday dosing. 3. Nutrition counseling and lifestyle plan; refer to DSME. 4. Endocrinology referral (Dr. Tashkentov). 5. Podiatry follow-up in 3 months. 6. Recheck A1C in 3 months.'
 
   if (template === 'hp') {
     return { S: s, O: o, A: a, P: p, title: 'H&P Note (prototype)' }
   }
   if (template === 'progress') {
     return {
-      S: 'Interval history: continued exertional symptoms; patient adherent to plan.',
-      O: 'Vitals stable. EKG completed.',
+      S: 'Follow-up for diabetes control and neuropathy symptoms; patient reports intermittent tingling and inconsistent metformin adherence.',
+      O: 'A1C 8.4%. BP 138/86. Monofilament screening ordered.',
       A: a,
-      P: 'Continue cardiology referral; stress test scheduling.',
+      P: 'Initiate semaglutide, reinforce adherence and diet plan, arrange endocrinology referral, plan A1C recheck.',
       title: 'Progress Note (prototype)',
     }
   }
@@ -161,7 +159,7 @@ export function buildSoapBody(template) {
       S: s,
       O: o,
       A: a,
-      P: 'Outpatient follow-up with cardiology; return precautions reviewed.',
+      P: 'Discharge with updated diabetes regimen and referrals; return precautions reviewed; follow-up arranged.',
       title: 'Discharge Summary (prototype)',
     }
   }
@@ -169,15 +167,58 @@ export function buildSoapBody(template) {
 }
 
 export const DEMO_REFERRAL_LETTER = `Date: April 2, 2026
-RE: Sarah Mitchell, DOB 03/12/1985, MRN 00421
+RE: John Smith, DOB 07/14/1968, MRN 00312
 
-Dear Dr. Patel,
+Dear Dr. Tashkentov,
 
-I am referring Ms. Mitchell for cardiology evaluation. She presents with a 2-week history of exertional chest tightness and dyspnea, with occasional dizziness. Family history is notable for coronary artery disease. We have ordered an EKG and plan cardiac stress testing.
+I am referring Mr. John Smith for endocrinology evaluation and management optimization of type 2 diabetes. He reports home glucose readings 180–220 mg/dL and bilateral foot tingling for ~3 months. He admits intermittent non-adherence with metformin due to work-related stress and dietary lapses.
 
-Provisional Dx: Stable angina (I20.9) pending stress test.
+Recent labs: A1C 8.4% (up from 7.1% in Jan 2026). Exam today includes planned monofilament sensory screening for early peripheral neuropathy.
 
-Urgency: Routine — please see within 2 weeks.
+Assessment: T2DM with hyperglycemia (E11.65) and suspected early diabetic neuropathy (E11.40).
+
+Plan initiated: Begin semaglutide (GLP-1 agonist) and reinforce adherence/lifestyle changes. I would appreciate your input on ongoing medication titration and long-term risk reduction.
 
 Sincerely,
-Dr. James Chen, MD`
+Dr. Elena Rodriguez, MD
+Internal Medicine
+Kelsey-Seybold Clinic, Houston`
+
+export const USER_INTERVIEW = {
+  date: 'April 2, 2026',
+  interviewer: 'Dr. Elena Rodriguez, MD',
+  patient: 'John Smith',
+  duration: '18 min',
+  sections: [
+    {
+      label: 'Presenting Concern',
+      text:
+        'John reports that his home glucose readings have been consistently elevated, typically ranging from 180–220 mg/dL. He also describes a new tingling sensation in both feet that has been present for approximately three months. He notes mild fatigue and feels his diabetes control has worsened since his last follow-up.',
+    },
+    {
+      label: 'Medication & Adherence',
+      text:
+        'He is prescribed metformin but admits he has missed doses several times per week due to a busy and stressful work schedule. He describes difficulty maintaining a consistent routine for meals and medications. He is open to strategies that make adherence easier and wants to avoid long-term complications.',
+    },
+    {
+      label: 'Diet & Lifestyle',
+      text:
+        'John reports increased reliance on late-night takeout and convenience foods, especially on workdays. He acknowledges higher carbohydrate intake than usual and fewer planned meals at home. He is willing to work on diet changes and asks for clear, practical steps he can follow.',
+    },
+    {
+      label: 'Review of Systems',
+      text:
+        'He denies chest pain, shortness of breath, or acute neurologic deficits. He endorses bilateral foot tingling without skin breakdown, ulcers, or focal weakness. He reports intermittent tiredness but no fever or recent illness.',
+    },
+    {
+      label: 'Clinical Assessment',
+      text:
+        'We reviewed that his A1C is 8.4%, increased from 7.1% in January, indicating worsening glycemic control. The pattern of symptoms is concerning for early peripheral neuropathy, and monofilament sensory testing was ordered to support objective screening. Blood pressure today is 138/86 with a BMI of 29.4, both relevant to cardiometabolic risk.',
+    },
+    {
+      label: 'Plan Discussed with Patient',
+      text:
+        'We discussed re-establishing consistent metformin use and implementing achievable dietary adjustments to reduce glucose variability. Given the rising A1C, we discussed initiating semaglutide (a GLP-1 agonist) and reviewed expected benefits and potential side effects. We also discussed referral to endocrinology (Dr. Tashkentov) for medication optimization and follow-up planning, with an A1C recheck in three months.',
+    },
+  ],
+}
