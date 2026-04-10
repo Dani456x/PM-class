@@ -205,29 +205,12 @@ const johnSessions = [
   },
 ]
 
-const nickySessions = [
-  {
-    id: 'nicky-1',
-    route: '/transcript/example',
-    title: 'User Interview 1: Nicky',
-    duration: 'Prototype',
-    subtitle: 'Simulated transcript',
-    status: 'approved',
-  },
-]
-
 const sidebarNodes = computed(() => [
   {
     kind: 'patient',
     key: 'john-smith',
     name: 'Smith, John',
     sessions: johnSessions,
-  },
-  {
-    kind: 'patient',
-    key: 'user-interview-nicky',
-    name: 'User interview — Nicky',
-    sessions: nickySessions,
   },
 ])
 
