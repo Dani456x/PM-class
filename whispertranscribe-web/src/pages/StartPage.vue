@@ -69,7 +69,15 @@
         <q-card-section class="text-h6">Quick intake</q-card-section>
         <q-card-section class="q-pt-none">
           <q-input v-model="newPatient.name" outlined dense label="Full name" class="q-mb-sm" />
-          <q-input v-model="newPatient.dob" outlined dense label="DOB (YYYY-MM-DD)" class="q-mb-sm" />
+          <q-input
+            v-model="newPatient.dob"
+            outlined
+            dense
+            label="DOB (MM/DD/YYYY)"
+            placeholder="MM/DD/YYYY"
+            mask="##/##/####"
+            class="q-mb-sm"
+          />
           <q-input v-model="newPatient.mrn" outlined dense label="MRN" class="q-mb-sm" />
           <q-input v-model="newPatient.insurance" outlined dense label="Insurance" />
         </q-card-section>
@@ -132,6 +140,7 @@ function createAndGo() {
     lastSeen: 'Today',
   }
   roster.value = [row, ...roster.value]
+  newPatient.value = { name: '', dob: '', mrn: '', insurance: '' }
   openCreate.value = false
   selectPatient(row)
 }
