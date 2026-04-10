@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.DS_Store
+.vercel/
+*.local
+
+# Windows / local noise
+desktop.ini
+debug.log
+
+# Large local binaries (do not commit)
+*.exe
+
+# Nested copy of repo (keep untracked)
+pm-class-repo/
+
+# Stray root landing file (not part of app)
+/index.html
+

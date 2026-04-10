@@ -395,7 +395,7 @@
                 </template>
               </q-input>
               <div v-if="askReply" class="text-body2 q-mb-md">{{ askReply }}</div>
-              <div class="text-caption text-weight-medium q-mb-xs">Visit history (last 5)</div>
+              <div class="text-caption text-weight-medium q-mb-xs">Visit history</div>
               <q-list dense bordered separator class="rounded-borders q-mb-md">
                 <q-item v-for="v in visitTimeline" :key="v.date + v.code" dense>
                   <q-item-section>

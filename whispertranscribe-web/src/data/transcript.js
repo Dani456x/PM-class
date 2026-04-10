@@ -1,5 +1,6 @@
 import exampleData from './example-transcript.json'
 import johnDoeMedicalData from './john-doe-medical.json'
+import johnSmithMedicalData from './john-smith-medical.json'
 
 export function formatTime(seconds) {
   const h = Math.floor(seconds / 3600)
@@ -60,6 +61,7 @@ export function buildTranscript(dataset) {
 }
 
 export function getTranscriptById(id) {
+  if (id === 'john-smith') return buildTranscript(johnSmithMedicalData)
   if (id === 'john-doe') return buildTranscript(johnDoeMedicalData)
   return buildTranscript(exampleData)
 }

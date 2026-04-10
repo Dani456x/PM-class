@@ -196,20 +196,12 @@ const johnSessions = [
     status: 'draft',
   },
   {
-    id: 'john-jan',
-    route: '/session',
-    title: 'Visit · Jan 8, 2026',
-    duration: '22m',
-    subtitle: 'A1C follow-up',
+    id: 'john-overview',
+    route: '/transcript/john-smith',
+    title: 'Patient overview',
+    duration: 'Prototype',
+    subtitle: 'Interview-style workspace',
     status: 'approved',
-  },
-  {
-    id: 'john-oct',
-    route: '/session',
-    title: 'Visit · Oct 5, 2025',
-    duration: '15m',
-    subtitle: 'Hypertension check',
-    status: 'sent',
   },
 ]
 

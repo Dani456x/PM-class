@@ -8,7 +8,6 @@
         </div>
       </div>
       <div class="row q-gutter-sm items-center">
-        <q-btn round unelevated color="primary" icon="sym_o_add" size="lg" style="min-width: 44px; min-height: 44px" aria-label="New patient" @click="openCreate = true" />
         <ActionButton variant="secondary" @click="openCreate = true">
           <span class="row items-center no-wrap"><q-icon name="sym_o_person_add" class="q-mr-sm" size="20px" /> New patient</span>
         </ActionButton>

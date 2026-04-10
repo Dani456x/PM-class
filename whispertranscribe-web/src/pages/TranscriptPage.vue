@@ -4,9 +4,9 @@
     <div class="q-px-lg q-pt-md">
       <div class="row items-center q-mb-xs">
         <q-icon name="sym_o_arrow_back" size="16px" class="text-primary q-mr-xs cursor-pointer" @click="$router.push('/start')" />
-        <span class="text-caption text-primary cursor-pointer" @click="$router.push('/start')">Projects</span>
+        <span class="text-caption text-primary cursor-pointer" @click="$router.push('/start')">{{ breadcrumbRoot }}</span>
         <span class="text-caption text-grey-5 q-mx-xs">/</span>
-        <span class="text-caption text-primary cursor-pointer">Examples</span>
+        <span class="text-caption text-primary cursor-pointer">{{ breadcrumbSection }}</span>
         <q-space />
         <q-btn flat dense round icon="sym_o_settings" size="sm" color="grey-7" />
       </div>
@@ -119,11 +119,11 @@
           </div>
         </div>
 
-        <!-- Joe Smith examples section (prototype) -->
+        <!-- Example actions section (prototype) -->
         <q-card v-if="segmentsToRender.length" flat bordered class="q-mx-lg q-mt-md" style="border-radius: 12px; overflow: hidden">
           <q-card-section class="q-pa-md">
             <div class="row items-center q-mb-sm">
-              <div class="text-h6 text-weight-bold">Example: Joe Smith (prototype)</div>
+              <div class="text-h6 text-weight-bold">{{ exampleHeaderTitle }}</div>
               <q-space />
               <q-badge outline color="primary">Prototype</q-badge>
             </div>
@@ -149,9 +149,9 @@
                   no-caps
                   outline
                   color="primary"
-                  label="Ask: Has this patient ever taken ibuprofen?"
+                  :label="quickAskLabel"
                   style="border-radius: 20px"
-                  @click="patientQuery = 'Has this patient ever taken ibuprofen?'; answerPatientQuery()"
+                  @click="patientQuery = quickAskQuestion; answerPatientQuery()"
                 />
               </div>
               <div class="col-12 col-md-6">
@@ -356,7 +356,7 @@
                 v-model="patientQuery"
                 outlined
                 dense
-                label='Smart Medical Record Search (example: "Has this patient ever taken ibuprofen?")'
+                :label="smartSearchLabel"
                 class="default-input"
                 @keyup.enter="answerPatientQuery"
               />
@@ -697,13 +697,15 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { getTranscriptById, formatTime } from '../data/transcript'
 import SpeakerSegment from '../components/SpeakerSegment.vue'
 import AudioPlayer from '../components/AudioPlayer.vue'
 
 const route = useRoute()
+
+const isJohnSmith = computed(() => route.params.id === 'john-smith')
 
 const transcript = computed(() => getTranscriptById(route.params.id))
 const record = computed(() => transcript.value.record)
@@ -734,6 +736,12 @@ try {
 const paragraphsToRender = computed(() => overriddenParagraphs.value || paragraphs.value)
 
 const resolvedRecordTitle = computed(() => recordTitle.value || record.value.title || 'Transcript')
+
+const breadcrumbRoot = computed(() => (isJohnSmith.value ? 'Patients' : 'Projects'))
+const breadcrumbSection = computed(() => (isJohnSmith.value ? 'Patient overview' : 'Examples'))
+const exampleHeaderTitle = computed(() =>
+  isJohnSmith.value ? 'Patient overview: John Smith (prototype)' : 'Example: Joe Smith (prototype)',
+)
 
 const isEditMode = ref(false)
 const editableSegments = ref([])
@@ -830,12 +838,31 @@ const soapFootnotes = ref([])
 const billingSuggestions = ref([])
 
 // Patient history + smart record search (prototype-only)
-const patientOptions = [
-  { label: 'Joe Smith (prototype)', value: 'joe-smith' },
-]
-const selectedPatientId = ref('joe-smith')
+const patientOptions = computed(() => {
+  if (isJohnSmith.value) return [{ label: 'John Smith (prototype)', value: 'john-smith' }]
+  return [{ label: 'Joe Smith (prototype)', value: 'joe-smith' }]
+})
+
+const selectedPatientId = ref(route.params.id === 'john-smith' ? 'john-smith' : 'joe-smith')
 
 const patientDataset = {
+  'john-smith': {
+    name: 'John Smith',
+    overview: [
+      'Chief context: follow-up for type 2 diabetes with elevated home glucose (180–220 mg/dL) and bilateral foot tingling for ~3 months (prototype data).',
+      'Key risks: cardiometabolic risk factors include hypertension and overweight (prototype).',
+      'Symptoms noted: bilateral foot tingling without ulceration; denies chest pain or shortness of breath (prototype).',
+      'Medication context: metformin prescribed; adherence has been inconsistent due to work stress; semaglutide discussed as escalation option (prototype).',
+      'Allergies: no known drug allergies (NKDA) in the prototype dataset.',
+    ],
+    conditions: ['type 2 diabetes mellitus with hyperglycemia', 'suspected peripheral neuropathy', 'essential hypertension'],
+    takenMeds: ['metformin', 'lisinopril', 'semaglutide'],
+    allergies: 'NKDA',
+    notes: [
+      'A1C trend: 8.4% currently, up from 7.1% earlier in the year (prototype).',
+      'Foot sensory screening (monofilament) planned/performed for objective neuropathy assessment (prototype).',
+    ],
+  },
   'joe-smith': {
     name: 'Joe Smith',
     overview: [
@@ -855,6 +882,17 @@ const patientOverview = computed(() => patientDataset[selectedPatientId.value]?.
 
 const patientQuery = ref('')
 const patientAnswer = ref('')
+
+const smartSearchLabel = computed(() =>
+  isJohnSmith.value
+    ? 'Smart Medical Record Search (example: "Has this patient ever taken metformin?")'
+    : 'Smart Medical Record Search (example: "Has this patient ever taken ibuprofen?")',
+)
+
+const quickAskQuestion = computed(() =>
+  isJohnSmith.value ? 'Has this patient ever taken metformin?' : 'Has this patient ever taken ibuprofen?',
+)
+const quickAskLabel = computed(() => `Ask: ${quickAskQuestion.value}`)
 
 function answerPatientQuery() {
   const dataset = patientDataset[selectedPatientId.value]
@@ -882,19 +920,39 @@ function answerPatientQuery() {
     return
   }
 
-  if (q.includes('headache') || q.includes('tension')) {
+  if (isJohnSmith.value && (q.includes('a1c') || q.includes('hba1c') || q.includes('hemoglobin'))) {
+    patientAnswer.value = 'Prototype data: most recent A1C is 8.4%, increased from 7.1% earlier in the year.'
+    return
+  }
+
+  if (isJohnSmith.value && (q.includes('neuropathy') || q.includes('tingling') || q.includes('feet') || q.includes('foot'))) {
+    patientAnswer.value =
+      'Prototype data: patient reports bilateral foot tingling for ~3 months; no ulcers noted. Objective screening (monofilament) was planned/performed as part of neuropathy assessment.'
+    return
+  }
+
+  if (isJohnSmith.value && (q.includes('blood pressure') || q.includes('bp') || q.includes('hypertension') || q.includes('htn'))) {
+    patientAnswer.value =
+      'Prototype data indicates essential hypertension as part of the patient context (example medication: lisinopril).'
+    return
+  }
+
+  if (!isJohnSmith.value && (q.includes('headache') || q.includes('tension'))) {
     patientAnswer.value =
       'Prototype data indicates prior episodes consistent with tension-type headache (often tied to stress and sleep changes).'
     return
   }
 
   if (q.includes('allergy')) {
-    patientAnswer.value = 'Prototype allergies: none listed in the example patient dataset.'
+    patientAnswer.value = isJohnSmith.value
+      ? `Prototype allergies: ${dataset.allergies || 'none listed'}.`
+      : 'Prototype allergies: none listed in the example patient dataset.'
     return
   }
 
-  patientAnswer.value =
-    'Prototype-only search: try questions like "Has this patient ever taken ibuprofen?" or "Does the patient have headache history?"'
+  patientAnswer.value = isJohnSmith.value
+    ? 'Prototype-only search: try questions like "Has this patient ever taken metformin?", "What is the A1C trend?", or "Any neuropathy symptoms?"'
+    : 'Prototype-only search: try questions like "Has this patient ever taken ibuprofen?" or "Does the patient have headache history?"'
 }
 
 // Referral letter + docs extraction (prototype-only)
@@ -949,13 +1007,23 @@ function extractAndSummarizeDocs() {
   docTimer = setTimeout(() => {
     docExtracting.value = false
     docExtractionStatus.value = 'Extraction complete (prototype).'
+    const patientName = patientDataset[selectedPatientId.value]?.name || 'Joe Smith'
+    const bullets = isJohnSmith.value
+      ? [
+          '- Complaint: elevated home glucose and bilateral foot tingling',
+          '- Relevant context: A1C 8.4% (prototype), hypertension risk factors',
+          '- Suggested next steps: foot sensory screening, medication adherence review, consider endocrine referral',
+        ]
+      : [
+          '- Complaint: headache + fatigue',
+          '- Associated symptoms: mild nausea; no fever; no vision changes',
+          '- Suggested next steps: follow up; consider basic labs if persistent',
+        ]
     extractedDocSummary.value =
       `Document type: ${docFile.value.type || 'unknown'}\n` +
-      `Patient: ${patientDataset[selectedPatientId.value]?.name || 'Joe Smith'}\n\n` +
+      `Patient: ${patientName}\n\n` +
       `Key extracted items (prototype):\n` +
-      `- Complaint: headache + fatigue\n` +
-      `- Associated symptoms: mild nausea; no fever; no vision changes\n` +
-      `- Suggested next steps: follow up; consider basic labs if persistent\n\n` +
+      `${bullets.join('\n')}\n\n` +
       `Note: This is mocked UI output (no real OCR or extraction performed).`
   }, 900)
 }
@@ -1028,8 +1096,40 @@ function generateBillingCodes() {
   const text = `${soapNote.value.cc} ${soapNote.value.symptoms} ${soapNote.value.assessment} ${soapNote.value.plan}`.toLowerCase()
   const items = []
 
+  if (isJohnSmith.value && (text.includes('a1c') || text.includes('diabet') || text.includes('glucose') || text.includes('hypergly'))) {
+    items.push({
+      code: 'E11.65',
+      label: 'Type 2 diabetes mellitus with hyperglycemia (example)',
+      reason: 'Selected because the SOAP includes elevated glucose / diabetes context (prototype suggestion).',
+    })
+  }
+
+  if (isJohnSmith.value && (text.includes('tingling') || text.includes('neuropath') || text.includes('feet') || text.includes('foot'))) {
+    items.push({
+      code: 'E11.40',
+      label: 'Type 2 diabetes mellitus with diabetic neuropathy, unspecified (example)',
+      reason: 'Selected because neuropathy-like symptoms are mentioned (prototype suggestion).',
+    })
+  }
+
+  if (isJohnSmith.value && (text.includes('bp') || text.includes('hypertension') || text.includes('htn'))) {
+    items.push({
+      code: 'I10',
+      label: 'Essential (primary) hypertension (example)',
+      reason: 'Selected because hypertension is referenced in the clinical context (prototype suggestion).',
+    })
+  }
+
+  if (isJohnSmith.value && (text.includes('metformin') || text.includes('semaglutide') || text.includes('glp'))) {
+    items.push({
+      code: 'Z79.84',
+      label: 'Long term (current) use of oral hypoglycemic drugs (example)',
+      reason: 'Selected because diabetes medications are referenced (prototype suggestion).',
+    })
+  }
+
   // Prototype-only heuristic examples for Joe Smith.
-  if (text.includes('headache') || text.includes('migraine') || text.includes('tension')) {
+  if (!isJohnSmith.value && (text.includes('headache') || text.includes('migraine') || text.includes('tension'))) {
     items.push({
       code: 'G44.209',
       label: 'Unspecified headache (example)',
@@ -1037,7 +1137,7 @@ function generateBillingCodes() {
     })
   }
 
-  if (text.includes('stress') || text.includes('tension')) {
+  if (!isJohnSmith.value && (text.includes('stress') || text.includes('tension'))) {
     items.push({
       code: 'Z73.3',
       label: 'Stress, not elsewhere classified (example)',
@@ -1045,7 +1145,7 @@ function generateBillingCodes() {
     })
   }
 
-  if (text.includes('nausea') || text.includes('vomit') || text.includes('queas')) {
+  if (!isJohnSmith.value && (text.includes('nausea') || text.includes('vomit') || text.includes('queas'))) {
     items.push({
       code: 'R11.0',
       label: 'Nausea (example)',
@@ -1063,6 +1163,16 @@ function generateBillingCodes() {
 
   billingSuggestions.value = items
 }
+
+watch(
+  () => route.params.id,
+  id => {
+    selectedPatientId.value = id === 'john-smith' ? 'john-smith' : 'joe-smith'
+    patientAnswer.value = ''
+    patientQuery.value = ''
+    generateSoapFromTranscript()
+  },
+)
 
 // Populate initial SOAP note for the example transcript.
 generateSoapFromTranscript()
@@ -1098,6 +1208,15 @@ const chatIsOffTopic = computed(() => {
     'ibuprofen',
     'nausea',
     'tension',
+    'diabetes',
+    'glucose',
+    'a1c',
+    'hba1c',
+    'neuropathy',
+    'metformin',
+    'semaglutide',
+    'hypertension',
+    'lisinopril',
   ]
 
   return !onTopicKeywords.some(k => q.includes(k))
@@ -1108,8 +1227,9 @@ function sendMagicChat() {
   if (!q) return
 
   if (chatIsOffTopic.value) {
-    magicChatAnswer.value =
-      'Prototype: this area is for medical transcription and note workflows. Try asking about SOAP notes, billing codes, patient history, or meds (example: "Has the patient taken ibuprofen?").'
+    magicChatAnswer.value = isJohnSmith.value
+      ? 'Prototype: this area is for medical transcription and note workflows. Try asking about SOAP notes, billing codes, patient history, or meds (example: "Has the patient taken metformin?").'
+      : 'Prototype: this area is for medical transcription and note workflows. Try asking about SOAP notes, billing codes, patient history, or meds (example: "Has the patient taken ibuprofen?").'
     return
   }
 

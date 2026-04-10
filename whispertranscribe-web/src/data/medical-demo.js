@@ -11,11 +11,9 @@ export const DEMO_PATIENT = {
 
 export const RECENT_PATIENTS = [DEMO_PATIENT]
 
-/** Last 5 visits with diagnosis codes (patient context timeline) */
+/** Recent visits with diagnosis codes (patient context timeline) */
 export const DEMO_VISIT_TIMELINE = [
   { date: 'Apr 2, 2026', label: 'Today — Diabetes management', code: 'E11.65' },
-  { date: 'Jan 8, 2026', label: 'A1C follow-up', code: 'E11.9' },
-  { date: 'Oct 5, 2025', label: 'Hypertension check', code: 'I10' },
   { date: 'Jul 14, 2025', label: 'Annual wellness', code: 'Z00.00' },
   { date: 'Apr 22, 2025', label: 'Foot neuropathy screen', code: 'E11.40' },
 ]

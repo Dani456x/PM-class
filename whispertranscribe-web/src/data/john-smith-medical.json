@@ -1,0 +1,137 @@
+{
+  "record": {
+    "source": "prototype",
+    "title": "John Smith — Patient overview (prototype)",
+    "duration": 540,
+    "ext": ".wav",
+    "language": "English",
+    "languageCode": "en",
+    "provider": null,
+    "model": null,
+    "prompt": [],
+    "noAudioDetected": false,
+    "transcriptTranslations": [],
+    "video": { "available": false, "source": "upload", "width": 0, "height": 0 },
+    "webInfo": null,
+    "podcastInfo": null,
+    "queueIdentifier": null,
+    "expectedSpeakers": 2,
+    "timesAIClipsCreated": null,
+    "speakerRecognition": true,
+    "speakers": [
+      { "speaker": 0, "speakerLabel": "Clinician" },
+      { "speaker": 1, "speakerLabel": "Patient" }
+    ]
+  },
+  "words": [
+    { "speaker": 0, "start": 0.0, "end": 0.4, "punctuated_word": "Good" },
+    { "speaker": 0, "start": 0.4, "end": 0.8, "punctuated_word": "morning," },
+    { "speaker": 0, "start": 0.8, "end": 1.3, "punctuated_word": "John." },
+    { "speaker": 0, "start": 1.3, "end": 1.8, "punctuated_word": "How" },
+    { "speaker": 0, "start": 1.8, "end": 2.2, "punctuated_word": "have" },
+    { "speaker": 0, "start": 2.2, "end": 2.6, "punctuated_word": "you" },
+    { "speaker": 0, "start": 2.6, "end": 3.2, "punctuated_word": "been" },
+    { "speaker": 0, "start": 3.2, "end": 3.8, "punctuated_word": "since" },
+    { "speaker": 0, "start": 3.8, "end": 4.2, "punctuated_word": "your" },
+    { "speaker": 0, "start": 4.2, "end": 4.8, "punctuated_word": "last" },
+    { "speaker": 0, "start": 4.8, "end": 5.5, "punctuated_word": "visit?" },
+
+    { "speaker": 1, "start": 6.0, "end": 6.4, "punctuated_word": "My" },
+    { "speaker": 1, "start": 6.4, "end": 6.9, "punctuated_word": "home" },
+    { "speaker": 1, "start": 6.9, "end": 7.6, "punctuated_word": "glucose" },
+    { "speaker": 1, "start": 7.6, "end": 8.2, "punctuated_word": "has" },
+    { "speaker": 1, "start": 8.2, "end": 8.8, "punctuated_word": "been" },
+    { "speaker": 1, "start": 8.8, "end": 9.4, "punctuated_word": "around" },
+    { "speaker": 1, "start": 9.4, "end": 9.9, "punctuated_word": "180" },
+    { "speaker": 1, "start": 9.9, "end": 10.3, "punctuated_word": "to" },
+    { "speaker": 1, "start": 10.3, "end": 10.9, "punctuated_word": "220," },
+    { "speaker": 1, "start": 10.9, "end": 11.4, "punctuated_word": "and" },
+    { "speaker": 1, "start": 11.4, "end": 12.1, "punctuated_word": "I've" },
+    { "speaker": 1, "start": 12.1, "end": 12.8, "punctuated_word": "had" },
+    { "speaker": 1, "start": 12.8, "end": 13.5, "punctuated_word": "tingling" },
+    { "speaker": 1, "start": 13.5, "end": 13.9, "punctuated_word": "in" },
+    { "speaker": 1, "start": 13.9, "end": 14.4, "punctuated_word": "both" },
+    { "speaker": 1, "start": 14.4, "end": 14.9, "punctuated_word": "feet" },
+    { "speaker": 1, "start": 14.9, "end": 15.3, "punctuated_word": "for" },
+    { "speaker": 1, "start": 15.3, "end": 15.8, "punctuated_word": "about" },
+    { "speaker": 1, "start": 15.8, "end": 16.4, "punctuated_word": "three" },
+    { "speaker": 1, "start": 16.4, "end": 17.2, "punctuated_word": "months." },
+
+    { "speaker": 0, "start": 18.0, "end": 18.5, "punctuated_word": "Your" },
+    { "speaker": 0, "start": 18.5, "end": 19.0, "punctuated_word": "A1C" },
+    { "speaker": 0, "start": 19.0, "end": 19.6, "punctuated_word": "is" },
+    { "speaker": 0, "start": 19.6, "end": 20.3, "punctuated_word": "8.4%," },
+    { "speaker": 0, "start": 20.3, "end": 20.8, "punctuated_word": "up" },
+    { "speaker": 0, "start": 20.8, "end": 21.3, "punctuated_word": "from" },
+    { "speaker": 0, "start": 21.3, "end": 22.0, "punctuated_word": "7.1%." },
+    { "speaker": 0, "start": 22.0, "end": 22.6, "punctuated_word": "This" },
+    { "speaker": 0, "start": 22.6, "end": 23.2, "punctuated_word": "sounds" },
+    { "speaker": 0, "start": 23.2, "end": 23.9, "punctuated_word": "like" },
+    { "speaker": 0, "start": 23.9, "end": 24.6, "punctuated_word": "early" },
+    { "speaker": 0, "start": 24.6, "end": 25.4, "punctuated_word": "neuropathy." },
+    { "speaker": 0, "start": 25.4, "end": 26.1, "punctuated_word": "We'll" },
+    { "speaker": 0, "start": 26.1, "end": 26.8, "punctuated_word": "do" },
+    { "speaker": 0, "start": 26.8, "end": 27.4, "punctuated_word": "a" },
+    { "speaker": 0, "start": 27.4, "end": 28.4, "punctuated_word": "monofilament" },
+    { "speaker": 0, "start": 28.4, "end": 29.2, "punctuated_word": "test" },
+    { "speaker": 0, "start": 29.2, "end": 29.8, "punctuated_word": "today." }
+  ],
+  "content": [
+    {
+      "name": "Summary",
+      "results": [
+        {
+          "body": "## Clinical Summary (prototype)\n\n### Chief Complaint (CC)\n- T2DM follow-up: elevated home glucose + bilateral foot tingling x ~3 months.\n\n### Key findings (prototype)\n- A1C 8.4% (up from 7.1%).\n- Symptoms concerning for early peripheral neuropathy.\n\n### Plan discussed (prototype)\n- Objective foot sensation screening (monofilament).\n- Medication adherence + escalation options; consider endocrinology follow-up."
+        }
+      ]
+    },
+    {
+      "name": "Quotes",
+      "results": [
+        {
+          "body": "- \"My home glucose has been around 180 to 220.\"\n- \"I've had tingling in both feet for about three months.\""
+        }
+      ]
+    },
+    {
+      "name": "Chapters",
+      "results": [
+        {
+          "body": "- Follow-up status check\n- Hyperglycemia + neuropathy symptoms\n- A1C trend and screening plan"
+        }
+      ]
+    },
+    {
+      "name": "Summary By Speaker",
+      "results": [
+        {
+          "body": "## {{speaker:0}}\n- Reviewed A1C trend and linked symptoms to possible early neuropathy.\n- Proposed monofilament screening and next-step planning.\n\n## {{speaker:1}}\n- Reported persistent hyperglycemia and bilateral foot tingling for ~3 months."
+        }
+      ]
+    },
+    {
+      "name": "Summary By Topic",
+      "results": [
+        {
+          "body": "## Glucose control\n- Home readings ~180–220 mg/dL (patient report).\n\n## Neuropathy symptoms\n- Tingling in both feet x ~3 months.\n\n## Labs\n- A1C 8.4% (up from 7.1%).\n\n## Next steps\n- Monofilament test (prototype) and treatment discussion."
+        }
+      ]
+    },
+    {
+      "name": "Follow Up Questions (UX Research)",
+      "results": [
+        {
+          "body": "- Any missed diabetes meds in the past 2–4 weeks?\n- Any new foot wounds, burning pain, or balance changes?\n- What does a typical workday diet look like?\n- Any hypoglycemia episodes or medication side effects?"
+        }
+      ]
+    },
+    {
+      "name": "UX Report",
+      "results": [
+        {
+          "body": "Prototype-only: This page mirrors the interview tabs UI to demonstrate an \"overall\" patient workspace for John Smith."
+        }
+      ]
+    }
+  ]
+}
