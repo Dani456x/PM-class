@@ -33,7 +33,7 @@
             <span class="text-body2">Insurance: {{ patient.insurance }}</span>
           </div>
           <div class="text-caption text-grey-7 q-mt-xs">
-            Last edited by Dr. James Chen at {{ lastEditTime }} · <span class="text-weight-medium">Audit trail on</span>
+            Last edited by Dr. Elena Rodriguez at {{ lastEditTime }} · <span class="text-weight-medium">Audit trail on</span>
           </div>
         </div>
         <q-btn flat dense round icon="sym_o_close" color="grey-7" class="q-mr-xs" aria-label="Clear patient" @click="confirmChangePatient" />
@@ -173,7 +173,7 @@
                       <q-btn flat dense no-caps size="sm" class="text-caption font-mono" @click="seekSim(block.startSec)">
                         {{ formatClock(block.startSec) }}
                       </q-btn>
-                      <q-badge v-if="block.adapted" outline color="teal" class="q-ml-xs">Learned from Dr. Chen</q-badge>
+                      <q-badge v-if="block.adapted" outline color="teal" class="q-ml-xs">Learned from Dr. Rodriguez</q-badge>
                     </div>
                     <div class="wt-utter-text text-body2">
                       <template v-for="(w, wi) in block.words" :key="wi">
@@ -187,7 +187,7 @@
                           @click="openCorrection(w, bi, wi)"
                         >
                           <q-tooltip anchor="top middle" self="bottom middle" class="bg-grey-9 text-body2" :delay="200">
-                            Did you mean: <strong>angina</strong> (0.94) / anjina / ?
+                            Did you mean: <strong>peripheral neuropathy</strong> (0.91) / neuroapthy / ?
                           </q-tooltip>
                           {{ w }}
                         </span>
@@ -255,7 +255,7 @@
                           <q-tooltip>
                             {{
                               sec.locked
-                                ? `Locked by Dr. Chen ${sec.lockedAt || '2:18 PM'} — unlock to edit`
+                                ? `Locked by Dr. Rodriguez ${sec.lockedAt || '2:18 PM'} — unlock to edit`
                                 : 'Lock section (AI will not overwrite)'
                             }}
                           </q-tooltip>
@@ -295,7 +295,7 @@
                     />
 
                     <q-card v-if="showReferralCallout" flat bordered class="q-pa-md wt-referral-callout">
-                      <div class="text-body2 q-mb-sm">Dr. Chen mentioned a referral to cardiology. Would you like to draft a referral letter?</div>
+                      <div class="text-body2 q-mb-sm">Dr. Rodriguez mentioned a referral to endocrinology. Would you like to draft a referral letter?</div>
                       <ActionButton variant="secondary" :loading="referralComposing" @click="draftReferral">Draft Referral Letter →</ActionButton>
                     </q-card>
 
@@ -532,8 +532,8 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn outline label="angina" @click="applyCorrection('angina')" />
-          <q-btn unelevated color="primary" label="Apply" @click="applyCorrection(correctionCustom || 'angina')" />
+          <q-btn outline label="peripheral neuropathy" @click="applyCorrection('peripheral neuropathy')" />
+          <q-btn unelevated color="primary" label="Apply" @click="applyCorrection(correctionCustom || 'peripheral neuropathy')" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -876,7 +876,7 @@ function seekSim(sec) {
 }
 
 function isUncertainWord(w) {
-  return /angina/i.test(w)
+  return /neuropathy/i.test(String(w))
 }
 
 function notifyEdit() {
@@ -889,7 +889,7 @@ function notifyAssign() {
 
 function applyBulkSpeaker() {
   const role = bulkSpeaker.value
-  const label = role === 'doctor' ? 'DR. CHEN' : role === 'patient' ? 'PATIENT' : 'OTHER'
+  const label = role === 'doctor' ? 'DR. RODRIGUEZ' : role === 'patient' ? 'PATIENT' : 'OTHER'
   renderedUtterances.value.forEach(b => {
     b.role = role
     b.speaker = label
@@ -899,7 +899,7 @@ function applyBulkSpeaker() {
 
 function openCorrection(w, bi, wi) {
   correctionCtx.value = { bi, wi, w }
-  correctionCustom.value = w.replace(/\?/g, '').replace(/[.,]/g, '') === 'angina' ? 'angina' : 'angina'
+  correctionCustom.value = 'peripheral neuropathy'
   correctionOpen.value = true
 }
 
@@ -907,13 +907,14 @@ function applyCorrection(suggestion) {
   const ctx = correctionCtx.value
   if (!ctx) return
   const block = renderedUtterances.value[ctx.bi]
+  const resolved = suggestion?.trim() || 'peripheral neuropathy'
   if (block && block.words[ctx.wi] !== undefined) {
-    block.words[ctx.wi] = suggestion.match(/angina/i) ? suggestion : 'angina'
+    block.words[ctx.wi] = resolved.match(/neuropathy/i) ? resolved : 'peripheral neuropathy'
   }
   lastEditTime.value = '2:15 PM'
   correctionOpen.value = false
   $q.notify({
-    message: 'Corrected by Dr. James Chen at 2:15 PM',
+    message: 'Corrected by Dr. Elena Rodriguez at 2:15 PM',
     color: 'positive',
     icon: 'sym_o_edit',
   })
@@ -957,23 +958,24 @@ function escHtml(s) {
 function renderSoapSectionHtml(sec) {
   let html = escHtml(sec.text)
   if (sec.key === 'S') {
-    html += ` <sup class="wt-soap-fn" data-t="5" style="cursor:pointer;color:#1565c0;font-weight:600">[0:05]</sup>`
+    html += ` <sup class="wt-soap-fn" data-t="7" style="cursor:pointer;color:#1565c0;font-weight:600">[0:07]</sup>`
   }
   if (sec.key === 'A') {
-    html += ` <sup class="wt-soap-fn" data-t="45" style="cursor:pointer;color:#1565c0;font-weight:600">[0:45]</sup>`
+    html += ` <sup class="wt-soap-fn" data-t="52" style="cursor:pointer;color:#1565c0;font-weight:600">[0:52]</sup>`
   }
   if (sec.key === 'P') {
-    html += ` <sup class="wt-soap-fn" data-t="67" style="cursor:pointer;color:#1565c0;font-weight:600">[1:07]</sup>`
+    html += ` <sup class="wt-soap-fn" data-t="90" style="cursor:pointer;color:#1565c0;font-weight:600">[1:30]</sup>`
   }
-  let terms = [
-    { re: /\b(stable angina)\b/gi, tip: 'Stable Angina Pectoris · ICD-10: I20.9 · 94% confidence' },
-    { re: /\b(EKG)\b/g, tip: 'Electrocardiogram · CPT: 93000 · 88% confidence' },
-    { re: /\b(stress test)\b/gi, tip: 'Cardiovascular stress test · CPT: 93015 · 76% confidence' },
-    { re: /\b(cardiologist)\b/gi, tip: 'Specialist referral · documentation tip' },
+  const terms = [
+    { re: /\b(E11\.65)\b/g, tip: 'Type 2 diabetes mellitus with hyperglycemia · ICD-10: E11.65 · 97% confidence' },
+    { re: /\b(E11\.40)\b/g, tip: 'Type 2 diabetes with diabetic neuropathy · ICD-10: E11.40 · 89% confidence' },
+    { re: /\b(I10)\b/g, tip: 'Essential hypertension · ICD-10: I10' },
+    { re: /\b(semaglutide)\b/gi, tip: 'GLP-1 receptor agonist · counseling / monitoring tip (prototype)' },
+    { re: /\b(monofilament)\b/gi, tip: 'Diabetic foot screening · CPT: S0395 (prototype)' },
+    { re: /\b(neuropathy)\b/gi, tip: 'Diabetic peripheral neuropathy · document distribution and exam (prototype)' },
+    { re: /\b(A1C|HbA1c)\b/gi, tip: 'Glycemic control metric · trend vs prior visit' },
+    { re: /\b(endocrinology)\b/gi, tip: 'Specialty referral · documentation tip' },
   ]
-  if (!/\bstable angina\b/i.test(sec.text)) {
-    terms = [...terms, { re: /\b(angina)\b/gi, tip: 'Angina · ICD-10: I20.9 · 94% confidence' }]
-  }
   for (const { re, tip } of terms) {
     html = html.replace(re, m => `<span class="wt-teal-term" title="${escHtml(tip)}">${m}</span>`)
   }

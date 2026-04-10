@@ -7,22 +7,7 @@
           <q-icon name="sym_o_lock" color="positive" size="22px" class="q-mr-xs" />
           <span class="text-caption text-weight-bold text-positive">HIPAA Compliant</span>
         </div>
-        <q-separator vertical inset class="q-mx-sm gt-sm" />
-        <div class="gt-sm text-caption text-grey-8 q-mr-lg">
-          Session lock in <span class="text-weight-bold text-primary">{{ idleCountdown }}</span>
-        </div>
         <q-space />
-        <div
-          class="column items-end q-mr-md cursor-help"
-          title="18.5 hours used · 2.5 hours remaining · Upgrade for more."
-        >
-          <div class="text-caption text-weight-medium">{{ creditsLabel }}</div>
-          <q-linear-progress :value="creditsProgress" color="primary" style="width: 140px; height: 3px; border-radius: 4px" />
-        </div>
-        <q-chip dense outline :color="netStrong ? 'positive' : 'warning'" class="gt-xs">
-          <q-icon :name="netStrong ? 'sym_o_wifi' : 'sym_o_wifi_off'" class="q-mr-xs" size="16px" />
-          {{ netStrong ? 'Strong' : 'Weak' }}
-        </q-chip>
       </q-toolbar>
     </q-header>
 
@@ -60,23 +45,8 @@
           />
         </div>
 
-        <div class="q-px-md q-mb-sm" v-if="!drawerMini">
-          <q-input
-            dense
-            outlined
-            placeholder="Search sessions, names, ICD…"
-            class="search-input"
-            dark
-            v-model="searchQuery"
-          >
-            <template v-slot:prepend>
-              <q-icon name="sym_o_search" color="white" />
-            </template>
-          </q-input>
-        </div>
-
         <div class="q-px-sm col" style="overflow-y: auto; overflow-x: hidden">
-          <template v-for="node in filteredSidebarNodes" :key="node.key">
+          <template v-for="node in sidebarNodes" :key="node.key">
             <q-expansion-item
               v-if="node.kind === 'patient'"
               dark
@@ -165,7 +135,7 @@
             </q-item-section>
             <q-item-section v-if="!drawerMini">
               <q-item-label class="text-white text-caption ellipsis">dani456x@gmail.com</q-item-label>
-              <q-item-label class="text-white text-caption" style="opacity: 0.7">{{ creditsLabel }}</q-item-label>
+              <q-item-label class="text-white text-caption" style="opacity: 0.7">Signed in</q-item-label>
             </q-item-section>
           </q-item>
           <div class="text-center q-mt-xs" v-if="!drawerMini">
@@ -210,13 +180,7 @@ const $q = useQuasar()
 const router = useRouter()
 const drawer = ref(true)
 const drawerMini = ref(false)
-const searchQuery = ref('')
 
-const idleSeconds = ref(14 * 60 + 59)
-let idleTimer = null
-const creditsLabel = ref('2h 34m remaining')
-const creditsProgress = ref(0.87)
-const netStrong = ref(true)
 const docDrag = ref(false)
 const docSummary = ref('')
 const docAnalyzing = ref(false)
@@ -249,38 +213,31 @@ const johnSessions = [
   },
 ]
 
-const sidebarNodes = computed(() => {
-  return [
-    {
-      kind: 'patient',
-      key: 'john-smith',
-      name: 'Smith, John',
-      sessions: johnSessions,
-    },
-  ]
-})
+const nickySessions = [
+  {
+    id: 'nicky-1',
+    route: '/transcript/example',
+    title: 'User Interview 1: Nicky',
+    duration: 'Prototype',
+    subtitle: 'Simulated transcript',
+    status: 'approved',
+  },
+]
 
-const filteredSidebarNodes = computed(() => {
-  const q = (searchQuery.value || '').trim().toLowerCase()
-  if (!q) return sidebarNodes.value
-  return sidebarNodes.value
-    .map(n => {
-      if (n.kind === 'patient') {
-        const nameHit = n.name.toLowerCase().includes(q)
-        const sess = n.sessions.filter(
-          s =>
-            s.title.toLowerCase().includes(q) ||
-            s.subtitle.toLowerCase().includes(q) ||
-            s.status.includes(q),
-        )
-        if (nameHit) return n
-        if (sess.length) return { ...n, sessions: sess }
-        return null
-      }
-      return null
-    })
-    .filter(Boolean)
-})
+const sidebarNodes = computed(() => [
+  {
+    kind: 'patient',
+    key: 'john-smith',
+    name: 'Smith, John',
+    sessions: johnSessions,
+  },
+  {
+    kind: 'patient',
+    key: 'user-interview-nicky',
+    name: 'User interview — Nicky',
+    sessions: nickySessions,
+  },
+])
 
 function badgeLabel(s) {
   if (s === 'draft') return 'Draft'
@@ -306,21 +263,6 @@ function toast(msg) {
 function goPatientSearch() {
   router.push({ path: '/start', query: { patientSearch: '1' } })
   window.dispatchEvent(new CustomEvent('wt-focus-patient-search'))
-}
-
-const idleCountdown = computed(() => {
-  const m = Math.floor(idleSeconds.value / 60)
-  const s = idleSeconds.value % 60
-  return `${m}:${String(s).padStart(2, '0')}`
-})
-
-function resetIdle() {
-  idleSeconds.value = 15 * 60 - 1
-}
-
-function onActivity() {
-  resetIdle()
-  netStrong.value = Math.random() > 0.15
 }
 
 function runDocDemo() {
@@ -358,21 +300,12 @@ function onPatientSearchHotkey(e) {
 }
 
 onMounted(() => {
-  resetIdle()
-  idleTimer = setInterval(() => {
-    if (idleSeconds.value > 0) idleSeconds.value -= 1
-  }, 1000)
-  window.addEventListener('pointerdown', onActivity)
-  window.addEventListener('keydown', onActivity)
   window.addEventListener('keydown', onPatientSearchHotkey, true)
   window.addEventListener('resize', onResize)
   onResize()
 })
 
 onUnmounted(() => {
-  if (idleTimer) clearInterval(idleTimer)
-  window.removeEventListener('pointerdown', onActivity)
-  window.removeEventListener('keydown', onActivity)
   window.removeEventListener('keydown', onPatientSearchHotkey, true)
   window.removeEventListener('resize', onResize)
 })
@@ -388,16 +321,6 @@ onUnmounted(() => {
 }
 .wt-page-container {
   background: #f8fafb;
-}
-.search-input .q-field__control {
-  background: rgba(255, 255, 255, 0.15) !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
-}
-.search-input .q-field__control input::placeholder {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-.search-input .q-field__control input {
-  color: white !important;
 }
 .bg-white-alpha {
   background: rgba(255, 255, 255, 0.15) !important;
