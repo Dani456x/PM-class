@@ -179,11 +179,11 @@
                       <template v-for="(w, wi) in block.words" :key="wi">
                         <span
                           v-if="filterSmallTalk && block.smallTalk"
-                          class="wt-small-talk"
-                        >{{ w }} </span>
+                          class="wt-utter-word wt-small-talk"
+                        >{{ w }}</span>
                         <span
                           v-else-if="isUncertainWord(w)"
-                          class="wt-uncertain-wavy wt-word-correct"
+                          class="wt-utter-word wt-uncertain-wavy wt-word-correct"
                           @click="openCorrection(w, bi, wi)"
                         >
                           <q-tooltip anchor="top middle" self="bottom middle" class="bg-grey-9 text-body2" :delay="200">
@@ -191,7 +191,7 @@
                           </q-tooltip>
                           {{ w }}
                         </span>
-                        <span v-else>{{ w }} </span>
+                        <span v-else class="wt-utter-word">{{ w }}</span>
                       </template>
                     </div>
                     <div v-if="hoverUtterance === bi" class="row q-gutter-xs q-mt-xs">
@@ -1385,6 +1385,13 @@ onUnmounted(() => {
 }
 .wt-bulk-speaker {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+.wt-utter-text .wt-utter-word {
+  display: inline;
+  margin-right: 0.28em;
+}
+.wt-utter-text .wt-utter-word:last-child {
+  margin-right: 0;
 }
 .wt-small-talk {
   text-decoration: line-through;

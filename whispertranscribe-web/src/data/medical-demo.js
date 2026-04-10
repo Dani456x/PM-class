@@ -135,56 +135,53 @@ export const DEMO_SOAP_TEMPLATES = [
 
 function peObjectiveFull() {
   return [
-    'Labs (today / recent): A1C 8.4% (prior 7.1% Jan 2026); basic metabolic panel reviewed — no acute renal limitation to metformin on today’s data (prototype).',
-    'Vitals: BP 138/86 mmHg, HR 78, RR 16, T 98.2°F oral, SpO2 97% on room air. BMI 29.4 kg/m².',
-    'General: Well-appearing male in no acute distress; seated comfortably; appropriate interaction.',
-    'HEENT: Normocephalic, atraumatic. PERRLA. Oropharynx moist. No lymphadenopathy appreciated.',
-    'Neck: Supple; no thyromegaly; no elevated JVD on brief seated exam.',
-    'Cardiovascular: Regular rate and rhythm; normal S1/S2; no murmur, rub, or gallop. No peripheral edema.',
-    'Pulmonary: Lungs clear to auscultation bilaterally; no wheezes, rales, or rhonchi; non-labored breathing.',
-    'Abdomen: Soft, non-tender, non-distended; normal active bowel sounds; no hepatosplenomegaly on limited exam.',
-    'Extremities: Bilateral feet — skin warm and intact without ulceration or active cellulitis; distal pulses palpable. Monofilament testing performed with reduced protective sensation bilaterally in a stocking distribution.',
-    'Neurologic: Alert and oriented ×3. Cranial nerves II–XII grossly intact on screening. Motor strength 5/5 throughout. Sensation: diminished distally in feet consistent with peripheral neuropathy screening; no focal weakness; gait stable.',
-    'Psychiatric: Cooperative; mood and affect appropriate; insight fair regarding glycemic control and adherence barriers.',
+    'Labs: A1C 8.4% (was 7.1% Jan 2026). BMP reviewed — no barrier to metformin (prototype).',
+    'Vitals: BP 138/86, HR 78, RR 16, T 98.2°F, SpO2 97% RA. BMI 29.4.',
+    'General: NAD, comfortable, appropriate.',
+    'HEENT / Neck: Unremarkable; no JVD.',
+    'CV: RRR, no m/r/g, no edema.',
+    'Lungs: CTA bilaterally.',
+    'Abd: Soft, NT, +BS.',
+    'Ext (feet): Warm, intact skin, pulses present; monofilament — reduced sensation bilaterally (stocking).',
+    'Neuro: AOx3; CN II–XII intact; strength 5/5; distal LE sensation ↓ vs stocking pattern; gait normal.',
+    'Psych: Cooperative, appropriate affect.',
   ].join('\n')
 }
 
 function peObjectiveProgress() {
   return [
-    'Vitals: BP 138/86, HR 78, BMI 29.4. Labs pertinent to visit: A1C 8.4% (up from 7.1%).',
-    'Cardiovascular: Regular rhythm; no edema; no acute ischemic symptoms elicited today.',
-    'Pulmonary: Clear bilaterally on brief auscultation.',
-    'Feet / neuro (focused): Skin intact without ulcer; monofilament — reduced sensation bilaterally distally; peripheral pulses palpable.',
+    'Vitals: BP 138/86, BMI 29.4. A1C 8.4% (↑ from 7.1%).',
+    'CV/Pulm: RRR, clear lungs, no edema.',
+    'Feet/neuro: Intact skin; monofilament — reduced distal sensation.',
   ].join('\n')
 }
 
 function peObjectiveDischarge() {
   return [
-    'Disposition: Stable for discharge from ambulatory diabetes visit; ambulating without distress; no acute cardiopulmonary compromise on exam.',
-    'Vitals at end of visit: BP 138/86; other vitals as above.',
-    'Foot safety: No acute ulceration; reduced protective sensation documented — diabetic foot precautions and urgent-return education reinforced.',
-    'Follow-up infrastructure: Endocrinology referral placed; primary care to continue hypertension and diabetes surveillance per plan.',
+    'Stable for discharge from clinic; ambulatory, no acute distress.',
+    'BP 138/86 at exit. Foot exam: no ulcer; protective sensation reduced — precautions reinforced.',
+    'Endocrine referral placed; PCP follow-up per plan.',
   ].join('\n')
 }
 
 export function buildSoapBody(template) {
   const sFull =
-    'John Smith is a 57-year-old male with type 2 diabetes mellitus presenting for follow-up of worsening glycemic control and new bilateral foot symptoms. HPI: He reports home glucose readings typically 180–220 mg/dL over recent weeks. For approximately three months he has noted bilateral foot tingling and mild burning, worse at night, without focal weakness or acute injury. He admits inconsistent metformin use (missed doses several times weekly) related to work stress and an irregular schedule. Diet has shifted toward more late-night takeout. ROS pertinent positives: hyperglycemia symptoms, distal paresthesias, fatigue. Pertinent negatives today: denies chest pain, pleuritic pain, acute shortness of breath, fevers, visual changes, or open foot wounds. He expresses concern about whether neuropathy can improve with better control.'
+    '57 y/o male with T2DM — follow-up for hyperglycemia and new bilateral foot tingling ×3 mo (burning worse at night). Home glucose ~180–220 mg/dL. Admits missed metformin (work stress) and more takeout. ROS+: paresthesias, fatigue. ROS−: chest pain, SOB, fever, open wounds. Asks if neuropathy can improve with control.'
 
   const sProgress =
-    'Interval follow-up for T2DM with hyperglycemia and suspected diabetic peripheral neuropathy. Reports continued tingling in both feet with variable adherence to metformin; dietary indiscretion persists on busy workdays. No acute cardiopulmonary symptoms today.'
+    'T2DM follow-up: persistent foot tingling; inconsistent metformin; diet lapses on workdays. No acute CP/SOB today.'
 
   const a =
-    'Problem list: (1) Type 2 diabetes mellitus with hyperglycemia, poorly controlled — E11.65. (2) Type 2 diabetes mellitus with diabetic neuropathy, peripheral — E11.40. (3) Essential (primary) hypertension — I10. Clinical synthesis: Rising A1C with adherence and lifestyle contributors; exam and monofilament findings support early distal symmetric polyneuropathy screening abnormalities in the prototype workflow.'
+    '(1) T2DM with hyperglycemia — E11.65. (2) T2DM with diabetic neuropathy — E11.40. (3) HTN — I10. Rising A1C; exam/monofilament consistent with distal symmetric polyneuropathy (prototype).'
 
   const p =
-    '1. Initiate semaglutide (GLP-1 receptor agonist) with counseling on gastrointestinal side effects, pancreatitis symptom precautions, and sick-day guidance (prototype). 2. Reinforce metformin adherence; discuss pillbox / alarm strategies and workday scheduling. 3. Medical nutrition therapy / DSME referral for carbohydrate consistency and meal planning. 4. Endocrinology referral (Dr. Tashkentov) for co-management and medication titration. 5. Podiatry in ~3 months (sooner if skin breakdown). 6. Recheck A1C in 3 months; home glucose monitoring log review at follow-up. 7. Continue BP monitoring; reinforce lifestyle modification for cardiometabolic risk.'
+    '1. Start semaglutide + counsel on SEs/sick day (prototype). 2. Metformin adherence tools (pillbox, alarms). 3. DSME / nutrition referral. 4. Endocrinology (Dr. Tashkentov). 5. Podiatry ~3 mo or sooner if skin issues. 6. A1C in 3 mo; review home logs. 7. BP and lifestyle counseling.'
 
   const pProgress =
-    'Continue metformin with adherence plan; start semaglutide as discussed; endocrinology referral sent; DSME and podiatry referrals; A1C in 3 months; return sooner for red-flag foot or chest symptoms.'
+    'Continue metformin + adherence plan; semaglutide started; endocrine + DSME + podiatry referrals; A1C 3 mo; urgent return for foot/chest red flags.'
 
   const pDischarge =
-    'Discharge from clinic with updated diabetes and neuropathy plan as documented; prescriptions and referrals provided; patient verbalizes understanding of foot self-inspection and when to seek urgent care; follow-up with PCP and endocrinology per scheduling instructions.'
+    'Discharge with diabetes/neuropathy plan, Rx and referrals; foot self-check and ED precautions reviewed; PCP/endocrine follow-up scheduled.'
 
   if (template === 'progress') {
     return {
